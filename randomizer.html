@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Marvel United Randomizer</title>
+  <script type="text/javascript" src="./static/libs/dexie/js/dexie.js"></script>
+  <script type="text/javascript" src="./static/libs/element-creator/js/element-creator.min.js"></script>
+  <script type="text/javascript" src="./static/libs/tabler/js/tabler.min.js"></script>
+  <script type="text/javascript" src="./static/libs/dom-to-image/js/dom-to-image.min.js"></script>
+  <script type="text/javascript" src="./static/libs/FileSaver/js/FileSaver.min.js"></script>
+  <script type="text/javascript" src="./static/js/config/constants.js"></script>
+  <script type="text/javascript" src="./static/js/config/config-db.js"></script>
+  <script type="text/javascript" src="./static/js/utils/game-utils.js"></script>
+  <script type="text/javascript" src="./static/js/utils/utils.js"></script>
+  <script type="text/javascript" src="./static/js/models/repository.js"></script>
+  <script type="text/javascript" src="./static/js/models/service.js"></script>
+  <script type="text/javascript" src="./static/js/controllers/page-controller.js"></script>
+  <script type="text/javascript" src="./static/js/card-game-maker.js"></script>
+  <link rel="stylesheet" type="text/css" href="./static/libs/fontawesome-free-6.2.0-web/css/all.min.css" />
+  <link rel="stylesheet" type="text/css" href="./static/libs/tabler/css/tabler.min.css" />
+  <link rel="stylesheet" type="text/css" href="./static/css/customs-mur.css" />
+  <link rel="shorcut icon" type="image/png" href="./static/img/logo.png">
+</head>
+
+<body class="layout-boxed">
+  <div class="page bg-dots">
+    <div class="page-body">
+      <div class="row p-5 pb-0 fst-game">
+        <div class="col-auto">
+          <div class="logo">
+            <div class="logo-container">
+              <a href="./index.html">
+                <img src="./static/img/logo.png" alt="Marvel United">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <h1 class="fst-game-title mb-2 ms-3 page-title"> Marvel United <br> Randomizer </h1>
+        </div>
+      </div>
+      <div class="row g-0 my-2 me-4">
+        <div class="col bg-primary-game text-white text-shadow ps-3 py-1 fst-game-title fs-1 label-title border border-5 border-black border-start-0 border-end-0"> Game settings </div>
+        <div class="col-auto border border-5 border-black border-start-0 border-top-0 border-end-0">
+          <img src="./static/img/labelBorder-game.png" alt="labelBorder" class="label-border label-border-game">
+        </div>
+        <div class="col-12 bg-primary-game text-white text-shadow ps-3 py-1 fst-game-title fs-1 label-title border border-5 border-black border-top-0 border-start-0 bg-blue h-1"> </div>
+      </div>
+      <div class="mx-5">
+        <div class="position-relative">
+          <div class="border-double bg-secondary-game p-2">
+            <div class="row">
+              <div class="col-12">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Number of players: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="players" value="1" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">1</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="players" value="2" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">2</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="players" value="3" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">3</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="players" value="4" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">4</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="players" value="5" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">5</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="players" value="6" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">6</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="players" value="7" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">7</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Make teams based on team decks: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="teamFromTeams" value="0" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="teamFromTeams" value="1" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Include random companions: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="companions" value="0" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="companions" value="1" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Include random challenge: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="challenge" value="0" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="challenge" value="1" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Super villain mode: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="superVillainMode" value="0" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="superVillainMode" value="1" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Any locations: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="anyLocation" value="0" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="anyLocation" value="1" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Balanced game: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="balanced" value="0" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="balanced" value="1" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
+                  </label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Two teams game: </div>
+                <hr class="my-1">
+                <div class="form-selectgroup mb-2">
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="twoTeamsGame" value="0" class="form-selectgroup-input" checked="">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
+                  </label>
+                  <label class="form-selectgroup-item">
+                    <input type="radio" name="twoTeamsGame" value="1" class="form-selectgroup-input">
+                    <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div id="errorMessage" class="alert bg-danger-lt border-2 border-danger rounded-0 d-none" role="alert">
+                  <span class="fst-game fw-bold">Error message</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <a href="#" class="btn btn-outline-cyan border-2 border-black rounded-0 w-100 fst-game-title" data-bs-toggle="modal" data-bs-target="#modal-options"> Expansions and Teams </a>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-outline-red border-2 border-black rounded-0 w-100 fst-game-title" onclick="getNewGame()"> Get game </button>
+              </div>
+            </div>
+          </div>
+          <img src="./static/img/corner-blue.png" alt="corner" class="top-0 end-0 corner corner-blue" style="transform: rotateY(180deg);">
+          <img src="./static/img/corner-blue.png" alt="corner" class="bottom-0 start-0 corner corner-blue" style="transform: rotateX(180deg);">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="position-fixed top-0 start-0 vw-100 vh-100" id="loadingScreen">
+    <div class="position-absolute top-50 start-50 translate-middle bg-blue border border-3 border-black rounded-3 p-3">
+      <strong role="status" class="fst-game-title text-white text-shadow">Loading...</strong>
+    </div>
+  </div>
+
+  <div class="modal modal-blur fade" id="modal-options" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-dots bg-primary-game fst-game-title">
+          <h2 class="modal-title text-white text-shadow fs-2">Expansions and Teams</h2>
+          <button type="button" class="btn-close opacity-100" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-2">
+          <div class="position-relative">
+            <div class="border-double bg-secondary-game p-2">
+              <div class="row">
+                <ul class="col nav nav-tabs nav-fill" data-bs-toggle="tabs" role="tablist">
+                  <li class="nav-item border border-2 border-end-0 border-black rounded-0" role="presentation">
+                    <a href="#tabs-boxes" data-bs-toggle="tab" aria-selected="true" role="tab"
+                      class="btn btn-outline-blue w-100 border-0 rounded-0 fst-game-title px-0 fs-6 active"> Core Boxes & Expansions </a>
+                  </li>
+                  <li class="nav-item border border-2 border-black rounded-0" role="presentation">
+                    <a href="#tabs-team-decks" data-bs-toggle="tab" aria-selected="true" role="tab"
+                      class="btn btn-outline-red w-100 border-0 rounded-0 fst-game-title px-0 fs-6"> Team Deacks </a>
+                  </li>
+                </ul>
+                <div class="col-auto btn-group" role="group">
+                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-yellow fs-1 p-0" onclick="selectAll(true);">
+                    <i class="fa-regular fa-square-check mx-2"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-yellow fs-1 p-0" onclick="selectAll(false);">
+                    <i class="fa-regular fa-square mx-2"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="tab-content py-2">
+                <div class="tab-pane active show" id="tabs-boxes" role="tabpanel">
+                  <div class="row justify-content-around" data-set="boxes"></div>
+                </div>
+                <div class="tab-pane" id="tabs-team-decks" role="tabpanel">
+                  <div class="row justify-content-around" data-set="team-decks"></div>
+                </div>
+              </div>
+            </div>
+            <img src="./static/img/corner-blue.png" alt="corner" class="top-0 start-0 corner corner-blue">
+            <img src="./static/img/corner-blue.png" alt="corner" class="bottom-0 end-0 corner corner-blue" style="transform: rotate(180deg);">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal modal-blur fade" id="modal-card" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-dots bg-primary-game fst-game-title">
+          <h2 class="modal-title text-white text-shadow fs-2">Card Game</h2>
+          <button type="button" class="btn-close opacity-100" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-2">
+          <div class="position-relative">
+            <div class="border-double bg-secondary-game p-2">
+              <div class="btn-group w-100" role="group">
+                <button class="btn btn-outline-red border-2 border-black rounded-0 w-100 fst-game-title" onclick="getNewGame()">
+                  Change game
+                </button>
+                <button type="button" class="btn btn-outline-blue border-black border-2 rounded-0 fst-game-title" onclick="dowloadImage();">
+                  Download card
+                </button>
+              </div>
+              <div class="overflow-x-auto border border-2 border-black bg-muted mt-3 p-3 h-auto">
+                <div id="cardGame" class="card bg-transparent card-container rounded-3">
+                  <input type="hidden" name="card-code" value="">
+                  <div class="ribbon ribbon-top card-ribbon bg-cyan border border-4 border-top-0 border-black rounded-bottom-3 text-shadow fst-game-title me-3">
+                    <div class="m-2 fs-1">
+                      <i class="fa-solid fa-user mx-1"></i>
+                      <span card-section="players"></span>
+                      <hr class="border-2 border-black my-2 opacity-100">
+                      <i card-section="is-valid" class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                  </div>
+                  <div class="card-body card-container bg-dots bg-secondary-game py-4 px-0 border border-2 rounded-2">
+                    <div class="row g-0 my-3 label-title-margin">
+                      <div class="col bg-primary-game text-white text-shadow ps-3 py-1 fst-game-title fs-1 label-title border border-5 border-black border-start-0 border-end-0">
+                        Battle card
+                      </div>
+                      <div class="col-auto border border-5 border-black border-start-0 border-top-0 border-end-0">
+                        <img src="./static/img/labelBorder-game.png" alt="labelBorder" class="label-border label-border-game">
+                      </div>
+                      <div class="col-12 bg-primary-game text-white text-shadow ps-3 py-1 fst-game-title fs-1 label-title border border-5 border-black border-top-0 border-start-0 bg-blue h-1"> </div>
+                    </div>
+                    <div class="bg-dots text-dark my-3 p-2 text-center fst-game fw-bold">
+                      <span class="fst-game-title">Mode: </span>
+                      <span card-section="card-description"></span>
+                      <br>
+                      <span class="fst-game-title">Battle code: </span>
+                      <span card-section="code"></span>
+                    </div>
+                    <div class="card-table-game text-center mx-auto position-relative">
+                      <table class="table table-sm table-bordered bg-secondary-game border-black border-double" aria-describedby="Card game">
+                        <tbody>
+                          <tr>
+                            <th rowspan="6" scope="col" class="text-center border-3 p-0 cols-1-section" card-section="blue-team">
+                              <div class="fst-game-title py-1 bg-primary-game text-white">Hero(es)</div>
+                              <div class="row row-cols-1 justify-content-center g-0"></div>
+                            </th>
+                            <th rowspan="6" scope="col" class="text-center border-3 p-0 cols-1-section" card-section="red-team">
+                              <div class="fst-game-title py-1 bg-primary-game text-white">Villain(s)</div>
+                              <div class="row row-cols-1 justify-content-center g-0"></div>
+                            </th>
+                            <th rowspan="6" scope="col" class="text-center border-3 p-0 cols-1-section" card-section="yellow-team">
+                              <div class="fst-game-title py-1 bg-primary-game text-white">Hero(es)</div>
+                              <div class="row row-cols-1 justify-content-center g-0"></div>
+                            </th>
+                            <th scope="col" class="text-center border-3 p-0">
+                              <div class="fst-game-title py-1 bg-primary-game text-white border border-3 border-x-0 border-top-0 border-black">Locations</div>
+                              <div card-section="locations" class="row g-0 text-start fst-game fw-bold fs-4 p-2"></div>
+                            </th>
+                          </tr>
+                          <tr>
+                            <th scope="col" class="text-center border-3 p-0">
+                              <div class="fst-game-title py-1 bg-primary-game text-white border border-3 border-x-0 border-top-0 border-black">Challenge</div>
+                              <div card-section="challenge" class="fst-game fw-bold fs-4 py-2"></div>
+                            </th>
+                          </tr>
+                          <tr class="border-bottom-0">
+                            <th scope="col" class="text-center border-3 border-bottom-0 p-0">
+                              <div class="fst-game-title py-1 bg-primary-game text-white border border-3 border-x-0 border-top-0 border-black">Team Decks</div>
+                              <div class="row my-1">
+                                <div class="col">
+                                  <div class="fst-game-title text-blue" card-section="blue-team-inidicator">Blue team</div>
+                                  <div card-section="blue-team-decks" class="fst-game fw-bold fs-4 px-2"></div>
+                                </div>
+                                <div class="col" card-section="red-team-optionals">
+                                  <div class="fst-game-title text-red">Red team</div>
+                                  <div card-section="red-team-decks" class="fst-game fw-bold fs-4 px-2"></div>
+                                </div>
+                                <div class="col" card-section="yellow-team-optionals">
+                                  <div class="fst-game-title text-yellow">Yellow team</div>
+                                  <div card-section="yellow-team-decks" class="fst-game fw-bold fs-4 px-2"></div>
+                                </div>
+                              </div>
+                            </th>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <img src="./static/img/corner-blue.png" alt="corner" class="top-0 start-0 corner corner-blue">
+                      <img src="./static/img/corner-blue.png" alt="corner" class="top-0 end-0 corner corner-blue" style="transform: rotateY(180deg);">
+                      <img src="./static/img/corner-blue.png" alt="corner" class="bottom-0 start-0 corner corner-blue" style="transform: rotateX(180deg);">
+                      <img src="./static/img/corner-blue.png" alt="corner" class="bottom-0 end-0 corner corner-blue" style="transform: rotate(180deg);">
+                      <div card-section="notes" class="fst-game fw-bold py-1 d-none"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <img src="./static/img/corner-blue.png" alt="corner" class="top-0 start-0 corner corner-blue">
+            <img src="./static/img/corner-blue.png" alt="corner" class="bottom-0 end-0 corner corner-blue" style="transform: rotate(180deg);">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+<script>
+  const pc = new PageController();
+  const cb = new CardBuilder();
+  const modalCard = new bootstrap.Modal('#modal-card');
+  const screenCoverLoading = document.getElementById('loadingScreen');
+
+  const buildPage = async () => {
+    const tabsBoxes = document.getElementById("tabs-boxes").lastElementChild;
+    const boxes = await pc.getAllBoxes();
+    for (const box of boxes) {
+      tabsBoxes.append(
+        elCr("div.col-auto", [
+          elCr("label.box-tile.form-imagecheck.mb-2.border.border-2.border-secondary.rounded-1", [
+            elCr(`input.form-imagecheck-input[name=boxes,type=checkbox,value=${box.id}${box.id == 2 ? ",checked=" : ""}]`),
+            elCr("span.form-imagecheck-figure.rounded-1", [
+              elCr(`img.form-imagecheck-image.rounded-1[src=static/img/cover/${UTILS.removeChars(box.name)}.png,alt=${box.name}]`),
+            ]),
+          ]),
+        ])
+      );
+    }
+    const tabsTeamDecks = document.getElementById("tabs-team-decks").lastElementChild;
+    const teams = await pc.getAllTeams();
+    for (const team of teams) {
+      tabsTeamDecks.append(
+        elCr("div.col-auto", [
+          elCr("label.card-tile.form-imagecheck.mb-2.border.border-2.border-secondary.rounded-1", [
+            elCr(`input.form-imagecheck-input[name=team-decks,type=checkbox,value=${team.id},checked=]`),
+            elCr("span.form-imagecheck-figure.rounded-1", [
+              elCr(`img.form-imagecheck-image.rounded-1[src=static/img/teams/${UTILS.removeChars(team.name)}.png,alt=${team.name}]`),
+            ]),
+          ]),
+        ])
+      );
+    }
+    screenCoverLoading.classList.add('d-none');
+  }
+
+  const selectAll = (checked) => {
+    const sets = document.querySelectorAll('[data-set]');
+    for (const set of sets) {
+      if (set.parentElement.classList.contains('active') && set.parentElement.classList.contains('show')) {
+        for (const item of document.querySelectorAll(`[name=${set?.dataset?.set}]`)) {
+          item.checked = checked;
+        }
+        return;
+      }
+    }
+  }
+
+  const getNewGame = async () => {
+    const settings = {
+      players: Number(document.querySelector('input[name="players"]:checked').value) || 0,
+      companions: Number(document.querySelector('input[name="companions"]:checked').value) || 0,
+      challenge: Number(document.querySelector('input[name="challenge"]:checked').value) || 0,
+      anyLocation: Number(document.querySelector('input[name="anyLocation"]:checked').value) || 0,
+      balanced: Number(document.querySelector('input[name="balanced"]:checked').value) || 0,
+      superVillainMode: Number(document.querySelector('input[name="superVillainMode"]:checked').value) || 0,
+      twoTeamsGame: Number(document.querySelector('input[name="twoTeamsGame"]:checked').value) || 0,
+      teamFromTeams: Number(document.querySelector('input[name="teamFromTeams"]:checked').value) || 0,
+      boxes: [],
+      teams: []
+    };
+    const boxes = document.querySelectorAll('input[name="boxes"]:checked');
+    for (const box of boxes) {
+      settings.boxes.push(Number(box.value));
+    }
+    const teamDecks = document.querySelectorAll('input[name="team-decks"]:checked');
+    for (let teamDeck of teamDecks) {
+      settings.teams.push(Number(teamDeck.value));
+    }
+
+    const { valid, message } = await pc.validateConfig(settings);
+
+    if (valid) {
+      screenCoverLoading.classList.remove('d-none');
+      try {
+        console.time();
+        const { error, game, randomizeErrorMessage } = await pc.getRandomizedGame(settings);
+        console.timeEnd();
+        if (!error) {
+          const notes = await pc.validateGame(game);
+          const code = await pc.getCodeGame(game);
+          const optionals = await pc.getOptionals(game);
+          const recoveredGame = await pc.getGameFromCode(code);
+          if (!UTILS.objectsAreEquals(game, recoveredGame)) console.warn('Different object games', 'game:', game, 'recoveredGame:', recoveredGame);
+          cb.buildCard(game, optionals, code, notes);
+          screenCoverLoading.classList.add('d-none');
+          modalCard.show();
+        } else{
+          console.warn('No game', game);
+          const errorMessage = document.getElementById('errorMessage');
+          errorMessage.lastElementChild.textContent = randomizeErrorMessage;
+          errorMessage.classList.remove('d-none');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      screenCoverLoading.classList.add('d-none');
+    } else {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.lastElementChild.textContent = message;
+      errorMessage.classList.remove('d-none');
+    }
+  }
+
+  const dowloadImage = () => {
+    const card = document.getElementById('cardGame');
+    domtoimage.toBlob(card)
+    .then(function (blob) {
+      window.saveAs(blob, 'MUCard.png');
+    });
+  }
+
+  buildPage();
+</script>
+
+</html>

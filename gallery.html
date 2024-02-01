@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Marvel United Randomizer</title>
+  <script type="text/javascript" src="./static/libs/dexie/js/dexie.js"></script>
+  <script type="text/javascript" src="./static/libs/element-creator/js/element-creator.min.js"></script>
+  <script type="text/javascript" src="./static/libs/fslightbox/js/index.js"></script>
+  <script type="text/javascript" src="./static/libs/tabler/js/tabler.min.js"></script>
+  <script type="text/javascript" src="./static/js/config/constants.js"></script>
+  <script type="text/javascript" src="./static/js/config/config-db.js"></script>
+  <script type="text/javascript" src="./static/js/utils/game-utils.js"></script>
+  <script type="text/javascript" src="./static/js/utils/utils.js"></script>
+  <script type="text/javascript" src="./static/js/models/repository.js"></script>
+  <script type="text/javascript" src="./static/js/models/service.js"></script>
+  <script type="text/javascript" src="./static/js/controllers/page-controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="./static/libs/fontawesome-free-6.2.0-web/css/all.min.css" />
+  <link rel="stylesheet" type="text/css" href="./static/libs/tabler/css/tabler.min.css" />
+  <link rel="stylesheet" type="text/css" href="./static/css/customs-mur.css" />
+  <link rel="shorcut icon" type="image/png" href="./static/img/logo.png">
+</head>
+
+<body class="layout-boxed">
+  <div class="page bg-dots">
+    <div class="page-body">
+      <div class="row p-5 pb-0 fst-game">
+        <div class="col-auto">
+          <div class="logo">
+            <div class="logo-container">
+              <a href="./index.html">
+                <img src="./static/img/logo.png" alt="Marvel United">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <h1 class="fst-game-title mb-2 ms-3 page-title"> Marvel United <br> Randomizer </h1>
+        </div>
+      </div>
+      <div class="row g-0 my-2 me-4">
+        <div class="col bg-primary-game text-white text-shadow ps-3 py-1 fst-game-title fs-1 label-title border border-5 border-black border-start-0 border-end-0"> Gallery </div>
+        <div class="col-auto border border-5 border-black border-start-0 border-top-0 border-end-0">
+          <img src="./static/img/labelBorder-game.png" alt="labelBorder" class="label-border label-border-game">
+        </div>
+        <div class="col-12 bg-primary-game text-white text-shadow ps-3 py-1 fst-game-title fs-1 label-title border border-5 border-black border-top-0 border-start-0 bg-blue h-1"> </div>
+      </div>
+      <div class="mx-5">
+        <div class="position-relative">
+          <div class="border-double bg-secondary-game p-2">
+            <ul class="nav nav-tabs nav-fill" data-bs-toggle="tabs" role="tablist">
+              <li class="nav-item border border-2 border-end-0 border-black rounded-0" role="presentation">
+                <a href="#tabs-boxes" data-bs-toggle="tab" aria-selected="true" role="tab" class="btn btn-outline-cyan w-100 border-0 rounded-0 fst-game-title active"> Core Boxes & Expansions </a>
+              </li>
+              <li class="nav-item border border-2 border-end-0 border-black rounded-0" role="presentation">
+                <a href="#tabs-heroes" data-bs-toggle="tab" aria-selected="true" role="tab" class="btn btn-outline-blue w-100 border-0 rounded-0 fst-game-title"> Heroes </a>
+              </li>
+              <li class="nav-item border border-2 border-end-0 border-black rounded-0" role="presentation">
+                <a href="#tabs-anti-heroes" data-bs-toggle="tab" aria-selected="true" role="tab" class="btn btn-outline-purple w-100 border-0 rounded-0 fst-game-title"> Anti-Heroes </a>
+              </li>
+              <li class="nav-item border border-2 border-end-0 border-black rounded-0" role="presentation">
+                <a href="#tabs-companions" data-bs-toggle="tab" aria-selected="true" role="tab" class="btn btn-outline-orange w-100 border-0 rounded-0 fst-game-title"> Companions </a>
+              </li>
+              <li class="nav-item border border-2 border-end-0 border-black rounded-0" role="presentation">
+                <a href="#tabs-villains" data-bs-toggle="tab" aria-selected="true" role="tab" class="btn btn-outline-red w-100 border-0 rounded-0 fst-game-title"> Villains </a>
+              </li>
+              <li class="nav-item border border-2 border-black rounded-0" role="presentation">
+                <a href="#tabs-others" data-bs-toggle="tab" aria-selected="true" role="tab" class="btn btn-outline-pink w-100 border-0 rounded-0 fst-game-title"> Others </a>
+              </li>
+            </ul>
+            <div class="tab-content py-2">
+              <div class="tab-pane active show" id="tabs-boxes" role="tabpanel">
+                <div class="row justify-content-around g-2"></div>
+              </div>
+              <div class="tab-pane" id="tabs-heroes" role="tabpanel">
+                <div class="border-3 border-start border-blue ps-2 fst-game fw-bold"> Core box/expansion: </div>
+                <hr class="my-1">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="heroes" onchange="filterBy(this);">
+                  <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
+                </select>
+                <div class="row">
+                  <div class="col">
+                    <div class="border-3 border-start border-blue ps-2 fst-game fw-bold"> Team: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teams" data-filter="heroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-blue ps-2 fst-game fw-bold"> Has equipments: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="equipments" data-filter="heroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                </div>
+                <hr class="my-1">
+                <div class="row justify-content-around g-2"></div>
+              </div>
+              <div class="tab-pane" id="tabs-anti-heroes" role="tabpanel">
+                <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Core box/expansion: </div>
+                <hr class="my-1">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="antiHeroes" onchange="filterBy(this);">
+                  <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
+                </select>
+                <div class="row">
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Team: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teams" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Has equipments: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="equipments" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row row-cols-3">
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Super villain mode: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="superVillain" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Team vs team: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teamVsTeam" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Sinister Six: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="sinisterSix" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Heralds of Galactus: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="heraldsOfGalactus" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Dark Avengers: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="darkAvengers" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Phoenix Five: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="phoenixFive" data-filter="antiHeroes" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                </div>
+                <hr class="my-1">
+                <div class="row justify-content-around g-2"></div>
+              </div>
+              <div class="tab-pane" id="tabs-companions" role="tabpanel">
+                <div class="border-3 border-start border-orange ps-2 fst-game fw-bold"> Core box/expansion: </div>
+                <hr class="my-1">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="companions" onchange="filterBy(this);">
+                  <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
+                </select>
+                <hr class="my-1">
+                <div class="row justify-content-around g-2"></div>
+              </div>
+              <div class="tab-pane" id="tabs-villains" role="tabpanel">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Core box/expansion: </div>
+                <hr class="my-1">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="villains" onchange="filterBy(this);">
+                  <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
+                </select>
+                <div class="row row-cols-3">
+                  <div class="col">
+                    <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Super villain mode: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="superVillain" data-filter="villains" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Team vs team: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teamVsTeam" data-filter="villains" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Sinister Six: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="sinisterSix" data-filter="villains" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Heralds of Galactus: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="heraldsOfGalactus" data-filter="villains" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Dark Avengers: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="darkAvengers" data-filter="villains" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                  <div class="col">
+                    <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Phoenix Five: </div>
+                    <hr class="my-1">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="phoenixFive" data-filter="villains" onchange="filterBy(this);">
+                      <option class="fw-bold" value="-1" selected> Select an option</option>
+                      <option class="fw-bold" value="1"> Yes </option>
+                      <option class="fw-bold" value="0"> No </option>
+                    </select>
+                  </div>
+                </div>
+                <hr class="my-1">
+                <div class="row justify-content-around g-2"></div>
+              </div>
+              <div class="tab-pane" id="tabs-others" role="tabpanel">
+                <div class="border-3 border-start border-pink ps-2 fst-game fw-bold"> Core box/expansion: </div>
+                <hr class="my-1">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="others" onchange="filterBy(this);">
+                  <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
+                </select>
+                <hr class="my-1">
+                <div class="row justify-content-around g-2"></div>
+              </div>
+            </div>
+          </div>
+          <img src="./static/img/corner-blue.png" alt="corner" class="top-0 end-0 corner corner-blue" style="transform: rotateY(180deg);">
+          <img src="./static/img/corner-blue.png" alt="corner" class="bottom-0 start-0 corner corner-blue" style="transform: rotateX(180deg);">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="position-fixed top-0 start-0 vw-100 vh-100" id="loadingScreen">
+    <div class="position-absolute top-50 start-50 translate-middle bg-blue border border-3 border-black rounded-3 p-3">
+      <strong role="status" class="fst-game-title text-white text-shadow">Loading...</strong>
+    </div>
+  </div>
+</body>
+
+<script>
+  const pc = new PageController();
+
+  const buildPage = async () => {
+    const inputFiltersBoxes = document.querySelectorAll('[data-filter-by=box]');
+    const inputFiltersTeams = document.querySelectorAll('[data-filter-by=teams]');
+    const gallery = {
+      boxes: { items: await pc.getAllBoxes(), color: 'cyan', container: document.getElementById('tabs-boxes') },
+      heroes: { items: await pc.getAllHeroesOnly(), color: 'blue', container: document.getElementById('tabs-heroes') },
+      antiHeroes: { items: await pc.getAllAntiHeroes(), color: 'purple', container: document.getElementById('tabs-anti-heroes') },
+      companions: { items: await pc.getAllCompanions(), color: 'orange', container: document.getElementById('tabs-companions') },
+      villains: { items: await pc.getAllVillains(), color: 'red', container: document.getElementById('tabs-villains') },
+      others: { items: await pc.getAllOthers(), color: 'pink', container: document.getElementById('tabs-others') }
+    };
+    const teams = await pc.getAllTeams();
+    for (const team of teams) {
+       for (const inputFilter of inputFiltersTeams) {
+        inputFilter.appendChild(elCr(`option.fw-bold[value=${team.id}]`, team.name));
+      }
+    }
+    for (const characters in gallery) {
+      for (const item of gallery[characters].items) {
+        let positionStyles = '';
+        let filters = '';
+
+        if (characters == 'boxes') {
+          for (const inputFilter of inputFiltersBoxes) {
+            inputFilter.appendChild(elCr(`option.fw-bold[value=${item.id}]`, item.name));
+          }
+        } else {
+          if (item?.position) {
+            const position = item.position.split(',');
+            positionStyles = `background-position: ${position[0]}% ${position[1]}%;` + (position.length == 3 ? `background-size: ${position[2]}%;` : '');
+          } else {
+            positionStyles = 'background-position: 50% 50%;';
+          }
+          filters = `data-set=${characters},`;
+          filters += `data-box=${item.box},`
+          if (characters == 'heroes' || characters == 'antiHeroes') {
+            filters += `data-teams=${item.teams},`;
+            filters += `data-equipments=${item.equipments},`;
+          }
+          if (characters == 'villains' || characters == 'antiHeroes') {
+            filters += `data-super-villain=${item.superVillain},`;
+            filters += `data-team-vs-team=${item.teamVsTeam},`;
+            filters += `data-sinister-six=${item.sinisterSix},`;
+            filters += `data-heralds-of-galactus=${item.heraldsOfGalactus},`;
+            filters += `data-dark-avengers=${item.darkAvengers},`;
+            filters += `data-phoenix-five=${item.phoenixFive}`;
+          }
+        }
+
+        gallery[characters].container.lastElementChild.appendChild(
+          elCr(`.col-auto${characters != 'boxes' ? '['+filters+']' : ''}`, [
+            elCr(`a.avatar.avatar-xl.p-0.border-0[data-fslightbox=boxes,data-width=${characters=='boxes'?'700':'680'},data-height=${characters=='boxes'?'700':'709'},href=static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png]`, [
+              elCr(`span.avatar.avatar-xl${characters=='boxes'?'':'.avatar-mu-xl'}.border.border-2.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png')]`),
+              elCr(`span.badge.badge-item.bg-${gallery[characters].color}.rounded-0.border.border-2.border-black.fst-game-title.w-100.text-white${item.name.length>17?'.text-wrap.fs-7':'.fs-6'}`, item.name),
+              ((characters == 'heroes' || characters == 'antiHeroes') && (item?.isFF || item?.equipments))
+                ? elCr('.position-absolute.start-0.bottom-0.fst-game-title.fs-6[style=margin-bottom:18px;]', [
+                  item?.equipments ? elCr('.d-inline.bg-white.border.border-bottom-0.border-2.border-black.text-black[style=padding:.2rem!important;]', [
+                    elCr('i.fa-solid.fa-gear'),
+                    elCr('span', `:${item.equipments}`)
+                  ]) : [],
+                  item?.isFF  ? elCr(`.d-inline.bg-white.border.border-bottom-0${item?.equipments?'.border-start-0':''}.border-2.border-black.text-blue[style=padding:.2rem!important;]`, 'FF') : []
+                ])
+                : [],
+            ])
+          ])
+        );
+      }
+    }
+    refreshFsLightbox();
+    document.getElementById('loadingScreen').classList.add('d-none');
+  }
+
+  const filterBy = (selectInput) => {
+    const meetsFilterConditions = (key, filterValue, value) => {
+      if (key == 'equipments') {
+        return filterValue == '1' ? Number(value) > 0 : Number(value) == 0;
+      }
+      if (key == 'teams') {
+        return value.split('-').includes(filterValue);
+      }
+      return filterValue == value;
+    }
+    const filters = {};
+    for (const values of document.querySelectorAll(`[data-filter=${selectInput?.dataset?.filter}]`)) {
+      filters[values?.dataset?.filterBy] = values?.value;
+    }
+    for (const item of document.querySelectorAll(`[data-set=${selectInput?.dataset?.filter}]`)) {
+      let meetsConditions = true;
+      for (const key in filters) {
+        if (filters[key] != '-1') {
+          meetsConditions = meetsConditions && meetsFilterConditions(key, filters[key], item?.dataset[key]);
+          if (!meetsConditions) break;
+        }
+      }
+      if (meetsConditions) {
+        item.classList.remove('d-none');
+      } else {
+        item.classList.add('d-none');
+      }
+    }
+  }
+
+  buildPage();
+</script>
+
+</html>
