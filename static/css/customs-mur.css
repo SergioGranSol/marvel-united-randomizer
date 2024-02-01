@@ -1,0 +1,196 @@
+/* FONT */
+@font-face {
+  font-family: Amboy-Black;
+  font-weight: normal;
+  font-style: normal;
+  src:
+    local("Amboy-Black"),
+    url("fonts/Amboy\ Black.ttf") format("truetype"),
+    url("fonts/Amboy\ Black.woff") format("woff"),
+    url("fonts/Amboy\ Black.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Tecnica-Bold-W01-Regular;
+  font-weight: normal;
+  font-style: normal;
+  size-adjust: 125%;
+  src:
+    local("Amboy-Black"),
+    url("fonts/Tecnica\ Bold\ W01\ Regular.ttf") format("truetype"),
+    url("fonts/Tecnica\ Bold\ W01\ Regular.woff") format("woff"),
+    url("fonts/Tecnica\ Bold\ W01\ Regular.woff2") format("woff2");
+}
+
+.fst-game-title {
+  letter-spacing: .05rem;
+  font-family: Amboy-Black, var(--tblr-body-font-family);
+}
+
+.fst-game {
+  letter-spacing: -.05rem;
+  font-family: Tecnica-Bold-W01-Regular, var(--tblr-body-font-family);
+}
+
+.text-shadow {
+  text-shadow: 2px 2px black;
+}
+
+.fs-7 {
+  font-size: 0.4rem!important;
+}
+
+/* BACKGROUNDS */
+
+#loadingScreen {
+  background-color: #2d4c737d;
+  z-index: 99999;
+}
+
+.bg-primary-game {
+  background-color: #2d4c73;
+}
+
+.bg-secondary-game {
+  background-color: #c3cbdc; background-image: linear-gradient(147deg, #c3cbdc 0%, #edf1f4 74%);
+}
+
+.bg-dots {
+  background-image: radial-gradient(#dadfe5 2px, transparent 2px), radial-gradient(#dadfe5 2px, transparent 2px) !important;
+  background-size: 15px 15px !important;
+  background-position: 0 0, 7.5px 7.5px !important;
+  background-color: #edf1f4 !important;
+}
+
+.bg-dots.bg-primary-game {
+  background-image: radial-gradient(#233e5f 2px, transparent 2px), radial-gradient(#233e5f 2px, transparent 2px) !important;
+  background-size: 15px 15px !important;
+  background-position: 0 0, 7.5px 7.5px !important;
+  background-color: #2d4c73 !important;
+}
+
+.bg-dots.bg-secondary-game {
+  background-image: radial-gradient(#2a3643 2px, transparent 2px), radial-gradient(#2a3643 2px, transparent 2px) !important;
+  background-size: 15px 15px !important;
+  background-position: 0 0, 7.5px 7.5px !important;
+  background-color: #3a4859 !important;
+}
+
+/* LOGO */
+
+.logo {
+  margin: -60px 0;
+  z-index: 0;
+}
+
+.logo-container {
+  position: relative;
+  width: 100px;
+  height: 85px;
+  z-index: 0;
+  box-shadow: 0 0 0 3px white, 0 0 0 5px #182433;
+  background: rgb(0, 28, 36);
+  background: linear-gradient(0deg, #001c24 0%, #125a66 35%, #1493a0 100%);
+}
+
+/* INTERFACE */
+
+.corner {
+  position: absolute;
+  width: 30px;
+  margin: -5px -3px;
+}
+
+.border-double {
+  border-width: 8px;
+  border-style: double;
+}
+
+/* TITLE PAGE */
+
+.label-title {
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 5px solid #667382;
+}
+
+.label-title-margin {
+  margin-right: 10rem !important;
+}
+
+.label-border {
+  max-width: 100px;
+  width: 100px;
+  height: 100%;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+
+/* GALLERY */
+
+.avatar-mu-xl {
+  background-size: 340px 354px;
+}
+
+.badge-item {
+  height: 17px;
+}
+
+/* CARD */
+
+.card-container {
+  width: 1044px;
+  height: 610px;
+}
+
+.card-ribbon {
+  width: 80px;
+}
+
+.card-table-game {
+  max-width: 950px;
+}
+
+.cols-1-section {
+  width: 112px;
+}
+
+.cols-2-section {
+  width: 228px;
+}
+
+.companion-avatar {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 1px;
+}
+
+/* MORE */
+
+.input-option {
+  min-width: 30px;
+  width: unset !important;
+  height: 30px;
+}
+
+.box-tile {
+  width: 75px;
+  height: 75px;
+}
+
+.card-tile {
+  width: 75px;
+  height: 75px;
+}
+
+.card-tile > span > img {
+  object-fit: cover;
+  height: 70px;
+}
+
+.page-title {
+  font-size: xx-large;
+  margin-top: -30px;
+}
