@@ -25,6 +25,21 @@ class Service {
   getAllOthers = async () =>
     await this.#repository.findAllOthers();
 
+  getAllModes = async () =>
+    await this.#repository.findAllModes();
+
+  getAllChallenges = async () =>
+    await this.#repository.findAllChallenges();
+
+  getAllLocations = async () =>
+    await this.#repository.findAllLocations();
+
+  getAllHeroesForGames = async () =>
+    await this.#repository.findAllHeroesForGames();
+
+  getAllVillainsForGames = async () =>
+    await this.#repository.findAllVillainsForGames();
+
   getModeById = async (id) =>
     await this.#repository.findModeById(id);
 

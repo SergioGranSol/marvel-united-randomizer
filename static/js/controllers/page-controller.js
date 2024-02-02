@@ -20,6 +20,16 @@ class PageController {
 
   getAllOthers = async () => await this.#mus.getAllOthers();
 
+  getAllModes = async () => await this.#mus.getAllModes();
+
+  getAllChallenges = async () => await this.#mus.getAllChallenges();
+
+  getAllLocations = async () => await this.#mus.getAllLocations();
+
+  getAllHeroesForGames = async () => await this.#mus.getAllHeroesForGames();
+
+  getAllVillainsForGames = async () => await this.#mus.getAllVillainsForGames();
+
   getCodeGame = async (game) => await this.#gu.getCodeGame(game);
 
   getGameFromCode = async (code) => {
