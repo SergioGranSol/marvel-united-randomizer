@@ -73,12 +73,22 @@ class CardBuilder {
   }
 
   #setNotes = (notes) => {
-    if (notes.length == 0) {
-      this.#card.querySelector('[card-section="is-valid"]').classList.remove('fa-triangle-exclamation');
-      this.#card.querySelector('[card-section="is-valid"]').classList.add('fa-circle-check');
+    const icon = this.#card.querySelector('[card-section="is-valid"]');
+    if (notes.errors.length > 0) {
+      icon.classList.remove('fa-triangle-exclamation', 'fa-circle-check');
+      icon.classList.add('fa-ban');
+      icon.parentElement.parentElement.classList.remove('bg-lime', 'bg-yellow');
+      icon.parentElement.parentElement.classList.add('bg-red');
+    } else if (notes.warnings.length > 0) {
+      icon.classList.remove('fa-ban', 'fa-circle-check');
+      icon.classList.add('fa-triangle-exclamation');
+      icon.parentElement.parentElement.classList.remove('bg-lime', 'bg-red');
+      icon.parentElement.parentElement.classList.add('bg-yellow');
     } else {
-      this.#card.querySelector('[card-section="is-valid"]').classList.add('fa-triangle-exclamation');
-      this.#card.querySelector('[card-section="is-valid"]').classList.remove('fa-circle-check');
+      icon.classList.remove('fa-triangle-exclamation', 'fa-ban');
+      icon.classList.add('fa-circle-check');
+      icon.parentElement.parentElement.classList.remove('bg-red', 'bg-yellow');
+      icon.parentElement.parentElement.classList.add('bg-lime');
     }
   }
 

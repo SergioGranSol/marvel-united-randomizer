@@ -279,10 +279,18 @@
                   Copy code
                 </button>
               </div>
+              <div id="warningsInGame" class="alert bg-yellow-lt border-2 border-yellow rounded-0 mt-3 fst-game d-none" role="alert">
+                <p class="fw-bold">This setup does not match with the rules but it can be played. You maybe need and extra copy of some pieces.</p>
+                <div>Warning here</div>
+              </div>
+              <div id="errorsInGame" class="alert bg-danger-lt border-2 border-danger rounded-0 mt-3 fst-game d-none" role="alert">
+                <p class="fw-bold">This setup cannot be played.</p>
+                <div>Errors here</div>
+              </div>
               <div class="overflow-x-auto border border-2 border-black bg-muted mt-3 p-3 h-auto">
                 <div id="cardGame" class="card bg-transparent card-container rounded-3">
                   <input type="text" class="d-none" name="card-code" value="">
-                  <div class="ribbon ribbon-top card-ribbon bg-cyan border border-4 border-top-0 border-black rounded-bottom-3 text-shadow fst-game-title me-3">
+                  <div class="ribbon ribbon-top card-ribbon bg-lime border border-4 border-top-0 border-black rounded-bottom-3 text-shadow fst-game-title me-3">
                     <div class="m-2 fs-1">
                       <i class="fa-solid fa-user mx-1"></i>
                       <span card-section="players"></span>
@@ -426,6 +434,8 @@
   }
 
   const getNewGame = async () => {
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.classList.add('d-none');
     const settings = {
       players: Number(document.querySelector('input[name="players"]:checked').value) || 0,
       companions: Number(document.querySelector('input[name="companions"]:checked').value) || 0,
@@ -452,6 +462,12 @@
     if (valid) {
       screenCoverLoading.classList.remove('d-none');
       try {
+        const errorsInGame = document.getElementById('errorsInGame');
+        errorsInGame.lastElementChild.replaceChildren();
+        errorsInGame.classList.add('d-none');
+        const warningsInGame = document.getElementById('warningsInGame');
+        warningsInGame.lastElementChild.replaceChildren();
+        warningsInGame.classList.add('d-none');
         console.time();
         const { error, game, randomizeErrorMessage } = await pc.getRandomizedGame(settings);
         console.timeEnd();
@@ -461,12 +477,23 @@
           const optionals = await pc.getOptionals(game);
           const recoveredGame = await pc.getGameFromCode(code);
           if (!UTILS.objectsAreEquals(game, recoveredGame)) console.warn('Different object games', 'game:', game, 'recoveredGame:', recoveredGame);
+          if (notes.errors.length > 0) {
+            for (const note of notes.errors) {
+              errorsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+            }
+            errorsInGame.classList.remove('d-none');
+          }
+          if (notes.warnings.length > 0) {
+            for (const note of notes.warnings) {
+              warningsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+            }
+            warningsInGame.classList.remove('d-none');
+          }
           cb.buildCard(game, optionals, code, notes);
           screenCoverLoading.classList.add('d-none');
           modalCard.show();
         } else{
           console.warn('No game', game);
-          const errorMessage = document.getElementById('errorMessage');
           errorMessage.lastElementChild.textContent = randomizeErrorMessage;
           errorMessage.classList.remove('d-none');
         }
@@ -476,7 +503,6 @@
         screenCoverLoading.classList.add('d-none');
       }
     } else {
-      const errorMessage = document.getElementById('errorMessage');
       errorMessage.lastElementChild.textContent = message;
       errorMessage.classList.remove('d-none');
     }

@@ -82,8 +82,6 @@ class PageController {
   }
 
   validateConfig = async (settings) => {
-    const errorMessage = document.getElementById('errorMessage');
-    errorMessage.classList.add('d-none');
     const errorMessages = {
       players: 'Invalid number of players: ',
       companions: 'Invalid companions option: ',
