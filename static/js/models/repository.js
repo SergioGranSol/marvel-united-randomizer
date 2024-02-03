@@ -50,6 +50,21 @@ class Repository {
   findAllOthers = async () =>
     await this.#db.others.orderBy('id').sortBy('name');
 
+  findAllModes = async () =>
+    await this.#db.modes.orderBy('name').sortBy('players');
+
+  findAllChallenges = async () =>
+    await this.#db.challenges.orderBy('name').toArray();
+
+  findAllLocations = async () =>
+    await this.#db.locations.orderBy('name').toArray();
+
+  findAllHeroesForGames = async () =>
+    await this.#db.heroes.orderBy('name').toArray();
+
+  findAllVillainsForGames = async () =>
+    await this.#db.villains.where('members').notEqual('-1').sortBy('name');
+
   findModeById = async (id) =>
     await this.#db.modes.where('id').equals(id).first();
 
@@ -210,8 +225,7 @@ class Repository {
         decks.push(Number(key));
       }
     }
-    return [... await this.#db.teams.where('id').equals(1).toArray(),
-      ...await this.#db.teams.where('id').anyOf(decks).toArray()];
+    return await this.#db.teams.where('id').anyOf(decks).toArray();
   }
 
   findMembersInVillainGroup = async (villains) =>

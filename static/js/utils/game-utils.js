@@ -1,87 +1,94 @@
 class GameUtils {
 
   validateGame = async (game) => {
-    let message = [];
+    const message = {
+      errors: [],
+      warnings: []
+    };
     if (new Set(game.villains.filter(item => item?.id).map(item => item.id)).size < game.villains.filter(item => item?.id).length) {
-      message.push('This game has duplicate villains.');
+      message.warnings.push('This game has duplicate villains.');
     }
     if (new Set(game.teamI.filter(item => item?.id).map(item => item.id)).size < game.teamI.filter(item => item?.id).length) {
-      message.push('This game has duplicate heroes in team I.');
+      message.warnings.push('This game has duplicate heroes in team I.');
     }
     if (new Set(game.teamII.filter(item => item?.id).map(item => item.id)).size < game.teamII.filter(item => item?.id).length) {
-      message.push('This game has duplicate heroes in team II.');
+      message.warnings.push('This game has duplicate heroes in team II.');
     }
     if (new Set(game.companionsI.filter(item => item?.id).map(item => item.id)).size < game.companionsI.filter(item => item?.id).length) {
-      message.push('This game has duplicate companions in team I.');
+      message.warnings.push('This game has duplicate companions in team I.');
     }
     if (new Set(game.companionsII.filter(item => item?.id).map(item => item.id)).size < game.companionsII.filter(item => item?.id).length) {
-      message.push('This game has duplicate companions in team II.');
+      message.warnings.push('This game has duplicate companions in team II.');
     }
     if (new Set(game.locations.filter(item => item?.id).map(item => item.id)).size < game.locations.filter(item => item?.id).length) {
-      message.push('This game has duplicate locations.');
+      message.warnings.push('This game has duplicate locations.');
+    }
+    const hasThanos = game.villains[game.villains.findIndex(villain => villain.name === 'Thanos')];
+    if (hasThanos && game.locations.some(location => location.hasVillain != hasThanos.id)) {
+      message.warnings.push('Thanos must used all Thanos Locations.');
     }
     if (game.villains.some(villain => villain.name === 'Doctor Doom')
     && ((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Latveria')) {
-      message.push('Doctor Doom must start in Latveria.');
+      message.warnings.push('Doctor Doom must start in Latveria.');
     }
     if (game.villains.some(villain => villain.name === 'Marrow')
     && ((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Morlock Tunnels')) {
-      message.push('Marrow must start in Morlock Tunnels.');
+      message.warnings.push('Marrow must start in Morlock Tunnels.');
     }
     if (game.villains.some(villain => villain.name === 'Apocalypse')
     && ((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Apocalypse\'s Pyramid')
     && game.initLocation != game.locations.findIndex(location => location.name == 'Starlight Citadel')) {
-      message.push('Apocalypse must start in Apocalypse\'s Pyramid and Heroes in Starlight Citadel.');
+      message.warnings.push('Apocalypse must start in Apocalypse\'s Pyramid and Heroes in Starlight Citadel.');
     }
     if (game.villains.some(villain => villain.name === 'Morlun')
     && ((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Loomworld')
     && game.initLocation != game.locations.findIndex(location => location.name == 'Sims Tower')) {
-      message.push('Morlun must start in Loomworld and Heroes in Sims Tower.');
+      message.warnings.push('Morlun must start in Loomworld and Heroes in Sims Tower.');
     }
 
     for (const villain of game.villains) {
       if (game.mode.code.endsWith('wSP') && villain?.superVillain == 0) {
-        message.push(`${villain.name} can't be use with Super Villain Mode.`);
+        message.warnings.push(`${villain.name} can't be use with Super Villain Mode.`);
       }
       if (game.mode.code.startsWith('DA') && villain?.darkAvengers == 0) {
-        message.push(`${villain.name} can't be use with Dark Avengers Mode.`);
+        message.errors.push(`${villain.name} can't be use with Dark Avengers Mode.`);
       }
       if (game.mode.code.startsWith('TvT') && villain?.teamVsTeam == 0) {
-        message.push(`${villain.name} can't be use with Team vs Team Mode.`);
+        message.warnings.push(`${villain.name} can't be use with Team vs Team Mode.`);
       }
       if (game.mode.code.startsWith('SS') && villain?.sinisterSix == 0) {
-        message.push(`${villain.name} can't be use with Sinister Six Mode.`);
+        message.errors.push(`${villain.name} can't be use with Sinister Six Mode.`);
       }
       if (game.mode.code.startsWith('HoG') && villain?.heraldsOfGalactus == 0) {
-        message.push(`${villain.name} can't be use with Heralds of Galactus Mode.`);
+        message.warnings.push(`${villain.name} can't be use with Heralds of Galactus Mode.`);
       }
     }
 
     if (game?.challenge.name === 'Traitor Challenge') {
       if (game.mode.code.startsWith('TvT')) {
-        message.push('Traitor Challenge can\'t be used in Team vs Team Mode');
+        message.warnings.push('Traitor Challenge can\'t be used in Team vs Team Mode');
       } else if (game.teamISize == 2) {
-        message.push('Traitor Challenge can only be used in games with 3 or 4 players.');
+        message.errors.push('Traitor Challenge can only be used in games with 3 or 4 players.');
       }
     }
 
     if (!game.mode.code.startsWith('TvT') && game?.challenge.name === 'Accelerated Villain Challenge') {
-      message.push('Accelerated Villain Challenge can only be used in Team vs Team Mode');
+      message.warnings.push('Accelerated Villain Challenge can only be used in Team vs Team Mode.');
     }
     if (game.mode.code.startsWith('TvT') && game?.challenge.name === 'Plan B Challenge') {
-      message.push('Plan B Challenge can\'t be used in Team vs Team Mode');
+      message.warnings.push('Plan B Challenge can\'t be used in Team vs Team Mode.');
     }
 
     if (game?.challenge.name === 'Hazardous Locations Challenge') {
       if (game.locations.reduce((accumulator, location) => accumulator + location.isHazardous, 0) < 3) {
-        message.push('Hazardous Locations Challenge must use 3 hazardous locations at least .');
+        message.warnings.push('Hazardous Locations Challenge must use 3 hazardous locations at least .');
       }
     }
     return message;
   }
 
   getCodeGame = async (game) => {
-    let code = [];
+    const code = [];
     try {
       code.push(game.mode.id < 10 ? `0${game.mode.id}` : `${game.mode.id}`);
       code.push(`${game.initLocation}`);

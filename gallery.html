@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marvel United Randomizer</title>
   <script type="text/javascript" src="./static/libs/dexie/js/dexie.js"></script>
   <script type="text/javascript" src="./static/libs/element-creator/js/element-creator.min.js"></script>
@@ -75,21 +76,21 @@
               <div class="tab-pane" id="tabs-heroes" role="tabpanel">
                 <div class="border-3 border-start border-blue ps-2 fst-game fw-bold"> Core box/expansion: </div>
                 <hr class="my-1">
-                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="heroes" onchange="filterBy(this);">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="box" data-filter="heroes" onchange="filterBy(this);">
                   <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
                 </select>
                 <div class="row">
                   <div class="col">
                     <div class="border-3 border-start border-blue ps-2 fst-game fw-bold"> Team: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teams" data-filter="heroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="teams" data-filter="heroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                     </select>
                   </div>
                   <div class="col">
                     <div class="border-3 border-start border-blue ps-2 fst-game fw-bold"> Has equipments: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="equipments" data-filter="heroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="equipments" data-filter="heroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -102,21 +103,21 @@
               <div class="tab-pane" id="tabs-anti-heroes" role="tabpanel">
                 <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Core box/expansion: </div>
                 <hr class="my-1">
-                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="antiHeroes" onchange="filterBy(this);">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="box" data-filter="antiHeroes" onchange="filterBy(this);">
                   <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
                 </select>
                 <div class="row">
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Team: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teams" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="teams" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                     </select>
                   </div>
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Has equipments: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="equipments" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="equipments" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -127,7 +128,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Super villain mode: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="superVillain" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="superVillain" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -136,7 +137,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Team vs team: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teamVsTeam" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="teamVsTeam" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -145,7 +146,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Sinister Six: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="sinisterSix" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="sinisterSix" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -154,7 +155,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Heralds of Galactus: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="heraldsOfGalactus" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="heraldsOfGalactus" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -163,7 +164,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Dark Avengers: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="darkAvengers" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="darkAvengers" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -172,7 +173,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-purple ps-2 fst-game fw-bold"> Phoenix Five: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="phoenixFive" data-filter="antiHeroes" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="phoenixFive" data-filter="antiHeroes" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -185,7 +186,7 @@
               <div class="tab-pane" id="tabs-companions" role="tabpanel">
                 <div class="border-3 border-start border-orange ps-2 fst-game fw-bold"> Core box/expansion: </div>
                 <hr class="my-1">
-                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="companions" onchange="filterBy(this);">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="box" data-filter="companions" onchange="filterBy(this);">
                   <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
                 </select>
                 <hr class="my-1">
@@ -194,14 +195,14 @@
               <div class="tab-pane" id="tabs-villains" role="tabpanel">
                 <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Core box/expansion: </div>
                 <hr class="my-1">
-                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="villains" onchange="filterBy(this);">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="box" data-filter="villains" onchange="filterBy(this);">
                   <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
                 </select>
                 <div class="row row-cols-3">
                   <div class="col">
                     <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Super villain mode: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="superVillain" data-filter="villains" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="superVillain" data-filter="villains" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -210,7 +211,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Team vs team: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="teamVsTeam" data-filter="villains" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="teamVsTeam" data-filter="villains" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -219,7 +220,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Sinister Six: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="sinisterSix" data-filter="villains" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="sinisterSix" data-filter="villains" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -228,7 +229,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Heralds of Galactus: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="heraldsOfGalactus" data-filter="villains" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="heraldsOfGalactus" data-filter="villains" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -237,7 +238,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Dark Avengers: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="darkAvengers" data-filter="villains" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="darkAvengers" data-filter="villains" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -246,7 +247,7 @@
                   <div class="col">
                     <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Phoenix Five: </div>
                     <hr class="my-1">
-                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="phoenixFive" data-filter="villains" onchange="filterBy(this);">
+                    <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="phoenixFive" data-filter="villains" onchange="filterBy(this);">
                       <option class="fw-bold" value="-1" selected> Select an option</option>
                       <option class="fw-bold" value="1"> Yes </option>
                       <option class="fw-bold" value="0"> No </option>
@@ -259,7 +260,7 @@
               <div class="tab-pane" id="tabs-others" role="tabpanel">
                 <div class="border-3 border-start border-pink ps-2 fst-game fw-bold"> Core box/expansion: </div>
                 <hr class="my-1">
-                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2 bg-dark-lt" data-filter-by="box" data-filter="others" onchange="filterBy(this);">
+                <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" data-filter-by="box" data-filter="others" onchange="filterBy(this);">
                   <option class="fw-bold" value="-1" selected> Select a core box/expansion</option>
                 </select>
                 <hr class="my-1">
@@ -340,8 +341,7 @@
               ((characters == 'heroes' || characters == 'antiHeroes') && (item?.isFF || item?.equipments))
                 ? elCr('.position-absolute.start-0.bottom-0.fst-game-title.fs-6[style=margin-bottom:18px;]', [
                   item?.equipments ? elCr('.d-inline.bg-white.border.border-bottom-0.border-2.border-black.text-black[style=padding:.2rem!important;]', [
-                    elCr('i.fa-solid.fa-gear'),
-                    elCr('span', `:${item.equipments}`)
+                    elCr('i.fa-solid.fa-gear'), `:${item.equipments}`
                   ]) : [],
                   item?.isFF  ? elCr(`.d-inline.bg-white.border.border-bottom-0${item?.equipments?'.border-start-0':''}.border-2.border-black.text-blue[style=padding:.2rem!important;]`, 'FF') : []
                 ])

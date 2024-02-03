@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marvel United Randomizer</title>
   <script type="text/javascript" src="./static/libs/dexie/js/dexie.js"></script>
   <script type="text/javascript" src="./static/libs/element-creator/js/element-creator.min.js"></script>
@@ -16,7 +17,7 @@
   <script type="text/javascript" src="./static/js/models/repository.js"></script>
   <script type="text/javascript" src="./static/js/models/service.js"></script>
   <script type="text/javascript" src="./static/js/controllers/page-controller.js"></script>
-  <script type="text/javascript" src="./static/js/card-game-maker.js"></script>
+  <script type="text/javascript" src="./static/js/game-card-builder.js"></script>
   <link rel="stylesheet" type="text/css" href="./static/libs/fontawesome-free-6.2.0-web/css/all.min.css" />
   <link rel="stylesheet" type="text/css" href="./static/libs/tabler/css/tabler.min.css" />
   <link rel="stylesheet" type="text/css" href="./static/css/customs-mur.css" />
@@ -224,18 +225,18 @@
                 <ul class="col nav nav-tabs nav-fill" data-bs-toggle="tabs" role="tablist">
                   <li class="nav-item border border-2 border-end-0 border-black rounded-0" role="presentation">
                     <a href="#tabs-boxes" data-bs-toggle="tab" aria-selected="true" role="tab"
-                      class="btn btn-outline-blue w-100 border-0 rounded-0 fst-game-title px-0 fs-6 active"> Core Boxes & Expansions </a>
+                      class="btn btn-outline-cyan w-100 border-0 rounded-0 fst-game-title px-0 fs-6 active"> Core Boxes & Expansions </a>
                   </li>
                   <li class="nav-item border border-2 border-black rounded-0" role="presentation">
                     <a href="#tabs-team-decks" data-bs-toggle="tab" aria-selected="true" role="tab"
-                      class="btn btn-outline-red w-100 border-0 rounded-0 fst-game-title px-0 fs-6"> Team Deacks </a>
+                      class="btn btn-outline-muted w-100 border-0 rounded-0 fst-game-title px-0 fs-6"> Team Deacks </a>
                   </li>
                 </ul>
                 <div class="col-auto btn-group" role="group">
-                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-yellow fs-1 p-0" onclick="selectAll(true);">
+                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-blue fs-1 p-0" onclick="selectAll(true);">
                     <i class="fa-regular fa-square-check mx-2"></i>
                   </button>
-                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-yellow fs-1 p-0" onclick="selectAll(false);">
+                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-muted fs-1 p-0" onclick="selectAll(false);">
                     <i class="fa-regular fa-square mx-2"></i>
                   </button>
                 </div>
@@ -268,17 +269,28 @@
           <div class="position-relative">
             <div class="border-double bg-secondary-game p-2">
               <div class="btn-group w-100" role="group">
-                <button class="btn btn-outline-red border-2 border-black rounded-0 w-100 fst-game-title" onclick="getNewGame()">
+                <button type="button" class="btn btn-outline-red border-2 border-black rounded-0 fst-game-title" onclick="getNewGame()">
                   Change game
                 </button>
-                <button type="button" class="btn btn-outline-blue border-black border-2 rounded-0 fst-game-title" onclick="dowloadImage();">
+                <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 fst-game-title" onclick="dowloadImage();">
                   Download card
                 </button>
+                <button type="button" class="btn btn-outline-cyan border-2 border-black rounded-0 fst-game-title" onclick="copyCode(this);">
+                  Copy code
+                </button>
+              </div>
+              <div id="warningsInGame" class="alert bg-yellow-lt border-2 border-yellow rounded-0 mt-3 fst-game d-none" role="alert">
+                <p class="fw-bold">This setup does not match with the rules but it can be played. You maybe need and extra copy of some pieces.</p>
+                <div>Warning here</div>
+              </div>
+              <div id="errorsInGame" class="alert bg-danger-lt border-2 border-danger rounded-0 mt-3 fst-game d-none" role="alert">
+                <p class="fw-bold">This setup cannot be played.</p>
+                <div>Errors here</div>
               </div>
               <div class="overflow-x-auto border border-2 border-black bg-muted mt-3 p-3 h-auto">
                 <div id="cardGame" class="card bg-transparent card-container rounded-3">
-                  <input type="hidden" name="card-code" value="">
-                  <div class="ribbon ribbon-top card-ribbon bg-cyan border border-4 border-top-0 border-black rounded-bottom-3 text-shadow fst-game-title me-3">
+                  <input type="text" class="d-none" name="card-code" value="">
+                  <div class="ribbon ribbon-top card-ribbon bg-lime border border-4 border-top-0 border-black rounded-bottom-3 text-shadow fst-game-title me-3">
                     <div class="m-2 fs-1">
                       <i class="fa-solid fa-user mx-1"></i>
                       <span card-section="players"></span>
@@ -333,7 +345,7 @@
                           <tr class="border-bottom-0">
                             <th scope="col" class="text-center border-3 border-bottom-0 p-0">
                               <div class="fst-game-title py-1 bg-primary-game text-white border border-3 border-x-0 border-top-0 border-black">Team Decks</div>
-                              <div class="row my-1">
+                              <div class="row my-2">
                                 <div class="col">
                                   <div class="fst-game-title text-blue" card-section="blue-team-inidicator">Blue team</div>
                                   <div card-section="blue-team-decks" class="fst-game fw-bold fs-4 px-2"></div>
@@ -368,7 +380,6 @@
       </div>
     </div>
   </div>
-
 
 </body>
 
@@ -423,6 +434,8 @@
   }
 
   const getNewGame = async () => {
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.classList.add('d-none');
     const settings = {
       players: Number(document.querySelector('input[name="players"]:checked').value) || 0,
       companions: Number(document.querySelector('input[name="companions"]:checked').value) || 0,
@@ -449,6 +462,12 @@
     if (valid) {
       screenCoverLoading.classList.remove('d-none');
       try {
+        const errorsInGame = document.getElementById('errorsInGame');
+        errorsInGame.lastElementChild.replaceChildren();
+        errorsInGame.classList.add('d-none');
+        const warningsInGame = document.getElementById('warningsInGame');
+        warningsInGame.lastElementChild.replaceChildren();
+        warningsInGame.classList.add('d-none');
         console.time();
         const { error, game, randomizeErrorMessage } = await pc.getRandomizedGame(settings);
         console.timeEnd();
@@ -458,32 +477,61 @@
           const optionals = await pc.getOptionals(game);
           const recoveredGame = await pc.getGameFromCode(code);
           if (!UTILS.objectsAreEquals(game, recoveredGame)) console.warn('Different object games', 'game:', game, 'recoveredGame:', recoveredGame);
+          if (notes.errors.length > 0) {
+            for (const note of notes.errors) {
+              errorsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+            }
+            errorsInGame.classList.remove('d-none');
+          }
+          if (notes.warnings.length > 0) {
+            for (const note of notes.warnings) {
+              warningsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+            }
+            warningsInGame.classList.remove('d-none');
+          }
           cb.buildCard(game, optionals, code, notes);
           screenCoverLoading.classList.add('d-none');
           modalCard.show();
         } else{
           console.warn('No game', game);
-          const errorMessage = document.getElementById('errorMessage');
           errorMessage.lastElementChild.textContent = randomizeErrorMessage;
           errorMessage.classList.remove('d-none');
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        screenCoverLoading.classList.add('d-none');
       }
-      screenCoverLoading.classList.add('d-none');
     } else {
-      const errorMessage = document.getElementById('errorMessage');
       errorMessage.lastElementChild.textContent = message;
       errorMessage.classList.remove('d-none');
     }
   }
 
   const dowloadImage = () => {
-    const card = document.getElementById('cardGame');
-    domtoimage.toBlob(card)
-    .then(function (blob) {
-      window.saveAs(blob, 'MUCard.png');
-    });
+    screenCoverLoading.classList.remove('d-none');
+    try {
+      const card = document.getElementById('cardGame');
+      domtoimage.toBlob(card)
+      .then(function (blob) {
+        window.saveAs(blob, 'MUCard.png');
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      screenCoverLoading.classList.add('d-none');
+    }
+  }
+
+  const copyCode = async (btn) => {
+    const code = document.querySelector('[name="card-code"]');
+    code.select();
+    code.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(code.value);
+    btn.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.textContent = 'Copy code';
+    }, 1500);
   }
 
   buildPage();

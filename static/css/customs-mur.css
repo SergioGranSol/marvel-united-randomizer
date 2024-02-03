@@ -169,10 +169,26 @@
 
 /* MORE */
 
+.form-selectgroup-input:checked+.form-selectgroup-label {
+  color: var(--tblr-yellow);
+  background: rgba(var(--tblr-white-rgb));
+  border-color: var(--tblr-blue)!important;
+}
+
+.form-imagecheck-input:checked~.form-imagecheck-figure:before,
+.form-imagecheck-figure:before {
+  border: 2px solid var(--tblr-muted);
+  border-radius: 0px;
+}
+
 .input-option {
   min-width: 30px;
   width: unset !important;
   height: 30px;
+}
+
+.selected-values {
+  max-height: 200px;
 }
 
 .box-tile {
