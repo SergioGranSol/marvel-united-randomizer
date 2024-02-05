@@ -8,7 +8,7 @@ class Repository {
     await this.#db.boxes.orderBy('id').toArray();
 
   findAllTeams = async () =>
-    await this.#db.teams.where('id').notEqual(1).toArray();
+    await this.#db.teams.where('id').notEqual(1).sortBy('name');
 
   findAllHeroesOnly = async () => {
     const heroes = await this.#db.heroes.where('isAntiHero').equals(0).sortBy('name');

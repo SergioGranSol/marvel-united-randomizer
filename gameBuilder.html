@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -52,7 +52,7 @@
         <div class="position-relative">
           <div class="border-double bg-secondary-game p-2">
             <div class="row">
-              <div class="col-12">
+              <div class="col-md-6 col-sm-12">
                 <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Mode: </div>
                 <hr class="my-1">
                 <select class="form-select form-select-sm border-black border-2 fst-game fw-bold mb-2" name="modes" onchange="cleanFrom(this);">
@@ -67,9 +67,28 @@
                 </select>
               </div>
               <div class="col-md-6 col-sm-12">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Locations ( 6 ): </div>
+                <hr class="my-1">
+                <div class="input-group mb-1">
+                  <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="locations"></div>
+                  <div class="border border-2 border-bottom-0 form-control border-black rounded-0 w-100 pb-1 px-2" data-set-values="locations" data-max-values="6"></div>
+                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-end-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Select locations
+                  </button>
+                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="locationNumber">
+                    <option value="1"> as location 1</option>
+                    <option value="2"> as location 2</option>
+                    <option value="3"> as location 3</option>
+                    <option value="4"> as location 4</option>
+                    <option value="5"> as location 5</option>
+                    <option value="6"> as location 6</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
                 <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Initial location: </div>
                 <hr class="my-1">
-                <div class="form-selectgroup">
+                <div class="form-selectgroup mb-1">
                   <label class="form-selectgroup-item">
                     <input type="radio" name="initLocation" value="1" class="form-selectgroup-input" checked="">
                     <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">1</span>
@@ -96,41 +115,45 @@
                   </label>
                 </div>
               </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Locations (Max 6): </div>
-                <hr class="my-1">
-                <div class="input-group mb-1">
-                  <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="locations"></div>
-                  <div class="border border-2 border-bottom-0 form-control border-black rounded-0 w-100 pb-1 px-2" data-set-values="locations" data-max-values="6"></div>
-                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Select locations
-                  </button>
-                </div>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Villains (Max <span data-max-values-label="villains">_</span>): </div>
+              <div class="col-12" data-game-builder-section="villains">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Villains ( <span data-max-values-label="villains">_</span> ): </div>
                 <hr class="my-1">
                 <div class="input-group mb-1">
                   <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="villains"></div>
                   <div class="border border-2 border-bottom-0 form-control border-black rounded-0 w-100 pb-1 px-2" data-set-values="villains" data-max-values="6"></div>
-                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-black bg-white rounded-0 fst-game fw-bold mb-1 text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-end-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select villain(s)
                   </button>
+                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="villainNumber">
+                    <option value="1"> as villain 1</option>
+                    <option value="2"> as villain 2</option>
+                    <option value="3"> as villain 3</option>
+                    <option value="4"> as villain 4</option>
+                    <option value="5"> as villain 5</option>
+                    <option value="6"> as villain 6</option>
+                  </select>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamISize">Heroes</span> (Max <span data-max-values-label="teamISize">_</span>): </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamISize">Heroes</span> ( <span data-max-values-label="teamISize">_</span> ): </div>
                 <hr class="my-1">
                 <div class="input-group mb-1">
                   <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="teamISize"></div>
                   <div class="border border-2 border-bottom-0 form-control border-black rounded-0 w-100 pb-1 px-2" data-set-values="teamISize" data-max-values="5"></div>
-                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-black bg-white rounded-0 fst-game fw-bold mb-1 text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-end-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select heroes
                   </button>
+                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="heroINumber">
+                    <option value="1"> as hero 1</option>
+                    <option value="2"> as hero 2</option>
+                    <option value="3"> as hero 3</option>
+                    <option value="4"> as hero 4</option>
+                    <option value="5"> as hero 5</option>
+                  </select>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamISize">Heroes</span> Companions (Max <span data-max-values-label="companionsI">_</span>): </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamISize">Heroes</span> Companions ( <span data-max-values-label="companionsI">_</span> ): </div>
                 <hr class="my-1">
                 <div class="input-group mb-1">
                   <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="companionsI"></div>
@@ -138,27 +161,34 @@
                   <button type="button" class="form-select form-select-sm border-2 border-top-0 border-end-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select companion(s)
                   </button>
-                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="heroCompanionI">
-                    <option value="1"> for Hero 1</option>
-                    <option value="2"> for Hero 2</option>
-                    <option value="3"> for Hero 3</option>
-                    <option value="4"> for Hero 4</option>
+                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="heroCompanionINumber">
+                    <option value="1"> for hero 1</option>
+                    <option value="2"> for hero 2</option>
+                    <option value="3"> for hero 3</option>
+                    <option value="4"> for hero 4</option>
                   </select>
                 </div>
               </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamIISize">Second</span> Team (Max <span data-max-values-label="teamIISize">_</span>): </div>
+              <div class="col-md-6 col-sm-12 d-none" data-game-builder-section="second-team">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamIISize">Second</span> Team ( <span data-max-values-label="teamIISize">_</span> ): </div>
                 <hr class="my-1">
                 <div class="input-group mb-1">
                   <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="teamIISize"></div>
                   <div class="border border-2 border-bottom-0 form-control border-black rounded-0 w-100 pb-1 px-2" data-set-values="teamIISize" data-max-values="5"></div>
-                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-black bg-white rounded-0 fst-game fw-bold mb-1 w-100 text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-end-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select heroes
                   </button>
+                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="heroIINumber">
+                    <option value="1"> as hero 1</option>
+                    <option value="2"> as hero 2</option>
+                    <option value="3"> as hero 3</option>
+                    <option value="4"> as hero 4</option>
+                    <option value="5"> as hero 5</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamIISize">Second</span> Team Companions (Max <span data-max-values-label="companionsII">_</span>): </div>
+              <div class="col-md-6 col-sm-12 d-none" data-game-builder-section="second-team">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamIISize">Second</span> Team Companions ( <span data-max-values-label="companionsII">_</span> ): </div>
                 <hr class="my-1">
                 <div class="input-group mb-1">
                   <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="companionsII"></div>
@@ -166,11 +196,11 @@
                   <button type="button" class="form-select form-select-sm border-2 border-top-0 border-end-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select companion(s)
                   </button>
-                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="heroCompanionII">
-                    <option value="1"> for Hero 1</option>
-                    <option value="2"> for Hero 2</option>
-                    <option value="3"> for Hero 3</option>
-                    <option value="4"> for Hero 4</option>
+                  <select class="form-select form-select-sm border-black border-top-0 border-start-0 border-2 rounded-0 bg-white fst-game fw-bold" name="heroCompanionIINumber">
+                    <option value="1"> for hero 1</option>
+                    <option value="2"> for hero 2</option>
+                    <option value="3"> for hero 3</option>
+                    <option value="4"> for hero 4</option>
                   </select>
                 </div>
               </div>
@@ -183,8 +213,6 @@
               </div>
               <div class="col-12">
                 <button class="btn btn-outline-red border-2 border-black rounded-0 w-100 mt-1 fst-game-title" onclick="getNewGame()"> Get game </button>
-              </div>
-              <div class="col-12">
                 <hr class="my-3">
                 <div class="input-group">
                   <button class="btn btn-outline-orange border-2 border-black rounded-0 fst-game-title" type="button" onclick="getGameFromCode();">Get from code</button>
@@ -216,7 +244,7 @@
           <div class="position-relative">
             <div class="border-double bg-secondary-game p-2">
               <div class="btn-group w-100" role="group">
-                <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 fst-game-title" onclick="dowloadImage();">
+                <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 fst-game-title" onclick="dowloadImage(this);">
                   Download card
                 </button>
                 <button type="button" class="btn btn-outline-cyan border-2 border-black rounded-0 fst-game-title" onclick="copyCode(this);">
@@ -371,41 +399,61 @@
   const setMultipleSelectValues = (input) => {
     const values = document.querySelector(`[data-set-values="${input.name}"]`);
     const maxValues = Number(values.dataset.maxValues);
-    let auxDataset = '';
+    const itemPosition = values.nextElementSibling.nextElementSibling;
     let auxText = '';
+    const auxDataset = `data-position=${itemPosition.value},`;
     if (input.name == 'companionsI' || input.name == 'companionsII') {
-      auxDataset = `data-hero=${values.nextElementSibling.nextElementSibling.value},`;
-      auxText = `Hero ${values.nextElementSibling.nextElementSibling.value} with `;
+      auxText = `Hero ${itemPosition.value} with ${input.nextElementSibling.textContent}`;
+    } else if (input.name == 'teamISize' || input.name == 'teamIISize') {
+      auxText = `${input.nextElementSibling.textContent} as hero ${itemPosition.value}`;
+    } else if (input.name == 'locations') {
+      auxText = `${input.nextElementSibling.textContent} as location ${itemPosition.value}`;
+    } else if (input.name == 'villains') {
+      auxText = `${input.nextElementSibling.textContent} as villain ${itemPosition.value}`;
     }
+
     if (values.childElementCount < maxValues && input.checked) {
       values.appendChild(
         elCr(`button.btn.badge.bg-white.border.border-2.border-blue.rounded-0.me-1.mb-1.fst-game-title.text-yellow[type=button,${auxDataset}data-id=${input.value},data-value=${input.name},onclick=removeSelection(this);]`, [
-          (input.name == 'companionsI' || input.name == 'companionsII') ? auxText + input.nextElementSibling.textContent : input.nextElementSibling.textContent , elCr('i.fa-solid.fa-close.ms-2')
+          auxText, elCr('i.fa-solid.fa-close.ms-2')
         ])
       );
+      itemPosition.querySelector(`[value="${itemPosition.value}"]`).disabled = true;
     } else if (!input.checked) {
-      values.querySelector(`[data-id="${input.value}"]`)?.remove();
+      const elementToRemove = values.querySelector(`[data-id="${input.value}"]`);
+      itemPosition.querySelector(`[value="${elementToRemove.dataset.position}"]`).disabled = false;
+      elementToRemove.remove();
     }
-    checkSet(document.querySelectorAll(`[name="${input.name}"]`), values.childElementCount, maxValues);
+    checkSet(document.querySelectorAll(`[name="${input.name}"]`), values);
   }
 
   const removeSelection = (selectedValue) => {
     const value = document.querySelector(`[data-set="${selectedValue.dataset.value}"] [value="${selectedValue.dataset.id}"]`);
     value.checked = false;
-    selectedValue.remove();
     const values = document.querySelector(`[data-set-values="${selectedValue.dataset.value}"]`);
-    checkSet(document.querySelectorAll(`[name="${selectedValue.dataset.value}"]`), values.childElementCount, Number(values.dataset.maxValues));
+    const itemPosition = values.nextElementSibling.nextElementSibling;
+    itemPosition.querySelector(`[value="${selectedValue.dataset.position}"]`).disabled = false;
+    selectedValue.remove();
+    checkSet(document.querySelectorAll(`[name="${selectedValue.dataset.value}"]`), values);
   }
 
-  const checkSet = (valuesSet, selectedValues, maxValues) => {
+  const checkSet = (valuesSet, values) => {
+    const maxValues = Number(values.dataset.maxValues);
     for (const checkbox of valuesSet) {
       if (!checkbox.checked) {
-        checkbox.disabled = selectedValues >= maxValues;
-        if (selectedValues >= maxValues) {
+        checkbox.disabled = values.childElementCount >= maxValues;
+        if (values.childElementCount >= maxValues) {
           checkbox.nextElementSibling.classList.add('text-muted');
         } else {
           checkbox.nextElementSibling.classList.remove('text-muted');
         }
+      }
+    }
+    const itemPosition = values.nextElementSibling.nextElementSibling;
+    for (const position of itemPosition.children) {
+      if (!position.disabled) {
+        position.selected = true;
+        break;
       }
     }
   }
@@ -431,33 +479,45 @@
         input.nextElementSibling.classList.add('border-muted', 'text-muted');
         input.nextElementSibling.classList.remove('border-black');
         input.nextElementSibling.disabled = true;
-        if (key == 'companionsI' || key == 'companionsII') {
-          input.nextElementSibling.nextElementSibling.classList.add('border-muted', 'text-muted');
-          input.nextElementSibling.nextElementSibling.classList.remove('border-black');
-          input.nextElementSibling.nextElementSibling.disabled = true;
-        }
+        input.nextElementSibling.nextElementSibling.classList.add('border-muted', 'text-muted');
+        input.nextElementSibling.nextElementSibling.classList.remove('border-black');
+        input.nextElementSibling.nextElementSibling.disabled = true;
       } else {
         input.classList.remove('border-muted');
         input.classList.add('border-black');
         input.nextElementSibling.classList.remove('border-muted', 'text-muted');
         input.nextElementSibling.classList.add('border-black');
         input.nextElementSibling.disabled = false;
-        if (key == 'companionsI' || key == 'companionsII') {
-          input.nextElementSibling.nextElementSibling.classList.remove('border-muted', 'text-muted');
-          input.nextElementSibling.nextElementSibling.classList.add('border-black');
-          input.nextElementSibling.nextElementSibling.disabled = false;
-        }
+        input.nextElementSibling.nextElementSibling.classList.remove('border-muted', 'text-muted');
+        input.nextElementSibling.nextElementSibling.classList.add('border-black');
+        input.nextElementSibling.nextElementSibling.disabled = false;
       }
-      if (key == 'teamISize') {
-        const inputNames = document.querySelectorAll('[data-team-label="teamISize"]');
-        for (const inputName of inputNames) {
-          inputName.textContent = selectedMode.dataset.teamIISize == 0 ? 'Heores' : 'Blue Team';
-        }
-      } else if (key == 'teamIISize') {
-        const inputNames = document.querySelectorAll('[data-team-label="teamIISize"]');
-        for (const inputName of inputNames) {
-          inputName.textContent = selectedMode.dataset.teamIISize == 0 ? 'Second' : selectedMode.dataset.villains == 0 ? 'Red' : 'Yellow';
-        }
+      const childrens = input.nextElementSibling.nextElementSibling.children;
+      for (let i = 0; i < childrens.length; i++) {
+        childrens[i].selected = (i == 0);
+        childrens[i].disabled = Number(selectedMode.dataset[key]) < (i + 1);
+      }
+    }
+    let inputNames = document.querySelectorAll('[data-team-label="teamISize"]');
+    for (const inputName of inputNames) {
+      inputName.textContent = selectedMode.dataset.teamIISize == 0 ? 'Heores' : 'Blue Team';
+    }
+    inputNames = document.querySelectorAll('[data-team-label="teamIISize"]');
+    for (const inputName of inputNames) {
+      inputName.textContent = selectedMode.dataset.teamIISize == 0 ? 'Second' : selectedMode.dataset.villains == 0 ? 'Red' : 'Yellow';
+    }
+    const villainsSection = document.querySelector('[data-game-builder-section="villains"]');
+    if (selectedMode.dataset.villains == 0) {
+      villainsSection.classList.add('d-none');
+    } else {
+      villainsSection.classList.remove('d-none');
+    }
+    const secondTeamSections = document.querySelectorAll('[data-game-builder-section="second-team"]');
+    for (const items of secondTeamSections) {
+      if (selectedMode.dataset.teamIISize == 0) {
+        items.classList.add('d-none');
+      } else {
+        items.classList.remove('d-none');
       }
     }
   }
@@ -480,13 +540,13 @@
         const optionals = await pc.getOptionals(game);
         if (notes.errors.length > 0) {
           for (const note of notes.errors) {
-            errorsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+            errorsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));
           }
           errorsInGame.classList.remove('d-none');
         }
         if (notes.warnings.length > 0) {
           for (const note of notes.warnings) {
-            warningsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+            warningsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));
           }
           warningsInGame.classList.remove('d-none');
         }
@@ -520,35 +580,41 @@
       const code = [];
       const selectElement = document.querySelector('[name="modes"]');
       if (selectElement.value == '-1') {
-        errorMessage.lastElementChild.textContent = 'Not chosen game mode.';
+        errorMessage.lastElementChild.textContent = 'Game mode not chosen.';
         errorMessage.classList.remove('d-none');
         return;
       }
       const selectedMode = selectElement.querySelector(`option[value="${selectElement.value}"]`);
-      const villains = [...document.querySelector('[data-set-values="villains"]').querySelectorAll('[data-id]')].map(ele => Number(ele.dataset.id));
+      const villains = [...document.querySelector('[data-set-values="villains"]').querySelectorAll('[data-id]')].sort((a, b) => a.dataset.position - b.dataset.position).map(ele => Number(ele.dataset.id));
       if (villains.length != selectedMode.dataset.villains) {
-        errorMessage.lastElementChild.textContent = 'Missing villains.';
+        errorMessage.lastElementChild.textContent = 'Villains not chosen.';
         errorMessage.classList.remove('d-none');
         return;
       }
-      const teamI = [...document.querySelector('[data-set-values="teamISize"]').querySelectorAll('[data-id]')].map(ele => Number(ele.dataset.id));
+      const teamI = [...document.querySelector('[data-set-values="teamISize"]').querySelectorAll('[data-id]')].sort((a, b) => a.dataset.position - b.dataset.position).map(ele => Number(ele.dataset.id));
       if (teamI.length != selectedMode.dataset.teamISize) {
-        errorMessage.lastElementChild.textContent = 'Missing heroes.';
+        errorMessage.lastElementChild.textContent = 'Heroes not chosen.';
         errorMessage.classList.remove('d-none');
         return;
       }
-      const teamII = [...document.querySelector('[data-set-values="teamIISize"]').querySelectorAll('[data-id]')].map(ele => Number(ele.dataset.id));
+      const teamII = [...document.querySelector('[data-set-values="teamIISize"]').querySelectorAll('[data-id]')].sort((a, b) => a.dataset.position - b.dataset.position).map(ele => Number(ele.dataset.id));
       if (teamII.length != selectedMode.dataset.teamIISize) {
-        errorMessage.lastElementChild.textContent = 'Missing heroes in second team.';
+        errorMessage.lastElementChild.textContent = 'Heroes not chosen in second team.';
         errorMessage.classList.remove('d-none');
         return;
       }
 
-      const locations = [...document.querySelector('[data-set-values="locations"]').querySelectorAll('[data-id]')].map(ele => Number(ele.dataset.id));
       code.push(selectedMode.value < 10 ? `0${selectedMode.value}` : `${selectedMode.value}`);
-      code.push(`${document.querySelector('input[name="initLocation"]:checked').value}`);
-      for (let i = 0; i < 6; i++) {
-        const id = locations[i] || 0;
+      code.push(`${document.querySelector('input[name="initLocation"]:checked').value - 1}`);
+      const locations = [...document.querySelector('[data-set-values="locations"]').querySelectorAll('[data-id]')].reduce((acc, ele) => {acc[ele.dataset.position] = Number(ele.dataset.id); return acc;}, {});
+      code.push(6 - Object.keys(locations).length);
+      for (let i = 1; i <= 6; i++) {
+        if (!locations.hasOwnProperty(i)) {
+          code.push(i);
+        }
+      }
+      for (const location in locations) {
+        const id = locations[location] || 0;
         code.push(id < 100 ? id < 10 ? `00${id}` : `0${id}` : `${id}`);
       }
       let challenge = document.querySelector('[name="challenges"]').value;
@@ -558,41 +624,34 @@
       for (let i = 0; i < selectedMode.dataset.villains; i++) {
         code.push(villains[i] < 100 ? villains[i] < 10 ? `00${villains[i]}` : `0${villains[i]}` : `${villains[i]}`);
       }
-      const companionsI = [...document.querySelector('[data-set-values="companionsI"]').querySelectorAll('[data-id]')].map(ele => ele.dataset.id + ',' + ele.dataset.hero)
-        .reduce((acc, item) => {
-          acc[item.split(',')[1]-1] = item.split(',')[0];
-          return acc;
-        }, {});
+      const companionsI = [...document.querySelector('[data-set-values="companionsI"]').querySelectorAll('[data-id]')].reduce((acc, ele) => { acc[ele.dataset.position] = Number(ele.dataset.id); return acc; }, {});
       code.push(teamI.length);
       for (let i = 0; i < selectedMode.dataset.teamISize; i++) {
         code.push(teamI[i] < 100 ? teamI[i] < 10 ? `00${teamI[i]}` : `0${teamI[i]}` : `${teamI[i]}`);
-        if (companionsI[i]) {
-          code.push(companionsI[i] < 10 ? `0${companionsI[i]}` : `${companionsI[i]}`);
-        } else code.push('00')
+        if (companionsI[i+1]) {
+          code.push(companionsI[i+1] < 10 ? `0${companionsI[i+1]}` : `${companionsI[i+1]}`);
+        } else code.push('00');
       }
-      const companionsII = [...document.querySelector('[data-set-values="companionsII"]').querySelectorAll('[data-id]')].map(ele => ele.dataset.id + ',' + ele.dataset.hero)
-        .reduce((acc, item) => {
-          return acc[item.split(',')[1]-1] = item.split(',')[0];
-        }, {});
+      const companionsII = [...document.querySelector('[data-set-values="companionsII"]').querySelectorAll('[data-id]')].reduce((acc, ele) => { acc[ele.dataset.position] = Number(ele.dataset.id); return acc; }, {});
       code.push(teamII.length);
       for (let i = 0; i < selectedMode.dataset.teamIISize; i++) {
         code.push(teamII[i] < 100 ? teamII[i] < 10 ? `00${teamII[i]}` : `0${teamII[i]}` : `${teamII[i]}`);
-        if (companionsII[i]) {
-          code.push(companionsII[i] < 10 ? `0${companionsII[i]}` : `${companionsII[i]}`);
-        } else code.push('00')
+        if (companionsII[i+1]) {
+          code.push(companionsII[i+1] < 10 ? `0${companionsII[i+1]}` : `${companionsII[i+1]}`);
+        } else code.push('00');
       }
       const game = await pc.getGameFromCode(code.join(""));
       const notes = await pc.validateGame(game);
       const optionals = await pc.getOptionals(game);
       if (notes.errors.length > 0) {
         for (const note of notes.errors) {
-          errorsInGame.appendChild(elCr("p.m-0", note));
+          errorsInGame.lastElementChild.appendChild(elCr("p.m-0", note));
         }
         errorsInGame.classList.remove('d-none');
       }
       if (notes.warnings.length > 0) {
         for (const note of notes.warnings) {
-          warningsInGame.appendChild(elCr("p.m-0", note));
+          warningsInGame.lastElementChild.appendChild(elCr("p.m-0", note));
         }
         warningsInGame.classList.remove('d-none');
       }
@@ -606,19 +665,21 @@
     }
   }
 
-  const dowloadImage = () => {
+  const dowloadImage = async (btn) => {
     screenCoverLoading.classList.remove('d-none');
-    try {
-      const card = document.getElementById('cardGame');
-      domtoimage.toBlob(card)
+    const card = document.getElementById('cardGame');
+    domtoimage.toBlob(card)
       .then(function (blob) {
         window.saveAs(blob, 'MUCard.png');
+        btn.textContent = 'Downloaded!';
+      }).catch(error => {
+        btn.textContent = 'Couldn\'t dowload card';
+        console.error(error);
       });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      screenCoverLoading.classList.add('d-none');
-    }
+    screenCoverLoading.classList.add('d-none');
+    setTimeout(() => {
+      btn.textContent = 'Download card';
+    }, 2000);
   }
 
   const copyCode = async (btn) => {

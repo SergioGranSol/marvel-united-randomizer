@@ -21,7 +21,7 @@ class Utils {
     return counter;
   }
 
-  removeChars = (str) => typeof str === 'string' ? str.split(' ').join('').split('\'').join('').split('.').join('').split(',').join('') : str;
+  removeChars = (str) => typeof str === 'string' ? str.split(' ').join('').split('\'').join('').split('.').join('').split(',').join('').split('(').join('').split(')').join('') : str;
 
   objectsAreEquals = (object1, object2) => {
     const keys1 = Object.keys(object1);

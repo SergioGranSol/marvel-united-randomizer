@@ -191,10 +191,9 @@
                   <span class="fst-game fw-bold">Error message</span>
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-12">
                 <a href="#" class="btn btn-outline-cyan border-2 border-black rounded-0 w-100 fst-game-title" data-bs-toggle="modal" data-bs-target="#modal-options"> Expansions and Teams </a>
-              </div>
-              <div class="col-6">
+                <hr class="my-3">
                 <button class="btn btn-outline-red border-2 border-black rounded-0 w-100 fst-game-title" onclick="getNewGame()"> Get game </button>
               </div>
             </div>
@@ -233,10 +232,10 @@
                   </li>
                 </ul>
                 <div class="col-auto btn-group" role="group">
-                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-blue fs-1 p-0" onclick="selectAll(true);">
+                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-blue fs-2 p-0" onclick="selectAll(true);">
                     <i class="fa-regular fa-square-check mx-2"></i>
                   </button>
-                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-muted fs-1 p-0" onclick="selectAll(false);">
+                  <button type="button" class="btn btn-outline-dark border-2 rounded-0 text-muted fs-2 p-0" onclick="selectAll(false);">
                     <i class="fa-regular fa-square mx-2"></i>
                   </button>
                 </div>
@@ -272,7 +271,7 @@
                 <button type="button" class="btn btn-outline-red border-2 border-black rounded-0 fst-game-title" onclick="getNewGame()">
                   Change game
                 </button>
-                <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 fst-game-title" onclick="dowloadImage();">
+                <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 fst-game-title" onclick="dowloadImage(this);">
                   Download card
                 </button>
                 <button type="button" class="btn btn-outline-cyan border-2 border-black rounded-0 fst-game-title" onclick="copyCode(this);">
@@ -479,13 +478,13 @@
           if (!UTILS.objectsAreEquals(game, recoveredGame)) console.warn('Different object games', 'game:', game, 'recoveredGame:', recoveredGame);
           if (notes.errors.length > 0) {
             for (const note of notes.errors) {
-              errorsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+              errorsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));
             }
             errorsInGame.classList.remove('d-none');
           }
           if (notes.warnings.length > 0) {
             for (const note of notes.warnings) {
-              warningsInGame.appendChild(elCr("p.m-0", `- ${note}`));
+              warningsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));
             }
             warningsInGame.classList.remove('d-none');
           }
@@ -508,19 +507,21 @@
     }
   }
 
-  const dowloadImage = () => {
+  const dowloadImage = async (btn) => {
     screenCoverLoading.classList.remove('d-none');
-    try {
-      const card = document.getElementById('cardGame');
-      domtoimage.toBlob(card)
-      .then(function (blob) {
-        window.saveAs(blob, 'MUCard.png');
-      });
-    } catch (error) {
+    const card = document.getElementById('cardGame');
+    domtoimage.toBlob(card)
+    .then(function (blob) {
+      window.saveAs(blob, 'MUCard.png');
+      btn.textContent = 'Downloaded!';
+    }).catch(error => {
+      btn.textContent = 'Couldn\'t dowload card';
       console.error(error);
-    } finally {
-      screenCoverLoading.classList.add('d-none');
-    }
+    });
+    screenCoverLoading.classList.add('d-none');
+    setTimeout(() => {
+      btn.textContent = 'Download card';
+    }, 2000);
   }
 
   const copyCode = async (btn) => {

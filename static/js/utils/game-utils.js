@@ -36,13 +36,13 @@ class GameUtils {
       message.warnings.push('Marrow must start in Morlock Tunnels.');
     }
     if (game.villains.some(villain => villain.name === 'Apocalypse')
-    && ((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Apocalypse\'s Pyramid')
-    && game.initLocation != game.locations.findIndex(location => location.name == 'Starlight Citadel')) {
+    && (((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Apocalypse\'s Pyramid')
+    || game.initLocation != game.locations.findIndex(location => location.name == 'Starlight Citadel'))) {
       message.warnings.push('Apocalypse must start in Apocalypse\'s Pyramid and Heroes in Starlight Citadel.');
     }
     if (game.villains.some(villain => villain.name === 'Morlun')
-    && ((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Loomworld')
-    && game.initLocation != game.locations.findIndex(location => location.name == 'Sims Tower')) {
+    && (((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Loomworld')
+    || game.initLocation != game.locations.findIndex(location => location.name == 'Sims Tower'))) {
       message.warnings.push('Morlun must start in Loomworld and Heroes in Sims Tower.');
     }
 
@@ -92,17 +92,29 @@ class GameUtils {
     try {
       code.push(game.mode.id < 10 ? `0${game.mode.id}` : `${game.mode.id}`);
       code.push(`${game.initLocation}`);
-      for (const location of game.locations) {
-        code.push(location.id < 100 ? location.id < 10 ? `00${location.id}` : `0${location.id}` : `${location.id}`);
+      const emptyLocations = {0:[]};
+      for (let i = 0; i < 6; i++) {
+        if (game.locations[i].id == 0) {
+          emptyLocations.push(i + 1);
+        }
+      }
+      code.push(`${emptyLocations[0].length}`);
+      if (emptyLocations.length < 6) {
+        code.push(emptyLocations.join(""));
+      }
+      for (let i = 0; i < 6; i++) {
+        if (game.locations[i].id != 0) {
+          code.push(game.locations[i].id < 100 ? game.locations[i].id < 10 ? `00${game.locations[i].id}` : `0${game.locations[i].id}` : `${game.locations[i].id}`);
+        }
       }
       code.push(game.challenge.id ? game.challenge.id < 10 ? `0${game.challenge.id}` : `${game.challenge.id}` : '00');
-      code.push(`${await UTILS.countObjects(game.villains)}`);
+      code.push(`${UTILS.countObjects(game.villains)}`);
       for (const villain of game.villains) {
         if (villain?.id) {
           code.push(villain.id < 100 ? villain.id < 10 ? `00${villain.id}` : `0${villain.id}` : `${villain.id}`);
         }
       }
-      code.push(`${await UTILS.countObjects(game.teamI)}`);
+      code.push(`${UTILS.countObjects(game.teamI)}`);
       for (let i = 0; i < game.teamI.length; i++) {
         if (game.teamI[i]?.id) {
           code.push(game.teamI[i].id < 100 ? game.teamI[i].id < 10 ? `00${game.teamI[i].id}` : `0${game.teamI[i].id}` : `${game.teamI[i].id}`);
@@ -111,7 +123,7 @@ class GameUtils {
           } else code.push('00')
         }
       }
-      const teamIISize = await UTILS.countObjects(game.teamII);
+      const teamIISize = UTILS.countObjects(game.teamII);
       code.push(`${teamIISize}`);
       if (teamIISize > 0) {
         for (let i = 0; i < game.teamII.length; i++) {
@@ -147,9 +159,27 @@ class GameUtils {
       position += 2;
       recoveredGame.initLocation = Number(code.substring(position, position + 1));
       position += 1;
-      for (let i = 1; i <= 6 ; i++) {
-        recoveredGame.locations[i-1] = Number(code.substring(position, position + 3));
+      let emptyLocations = Number(code.substring(position, position + 1));
+      position += 1;
+      emptyLocations = emptyLocations <= 6 ? emptyLocations : 6;
+      const locationsWithId = 6 - emptyLocations;
+      const emptyLocationsAux = [];
+      for (let i = 1; i <= emptyLocations; i++) {
+        emptyLocationsAux.push(Number(code.substring(position, position + 1)));
+        position += 1;
+      }
+      const locationsWithIdAux = [];
+      for (let i = 1; i <= locationsWithId; i++) {
+        locationsWithIdAux.push(Number(code.substring(position, position + 3)));
         position += 3;
+      }
+      for (let i = 0; i < 6; i++ ) {
+        if (emptyLocationsAux.includes(i + 1)) {
+          continue;
+        } else {
+          recoveredGame.locations[i] = locationsWithIdAux[0];
+          locationsWithIdAux.shift();
+        }
       }
       recoveredGame.challenge = Number(code.substring(position, position + 2));
       position += 2;
