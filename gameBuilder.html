@@ -243,13 +243,20 @@
         <div class="modal-body p-2">
           <div class="position-relative">
             <div class="border-double bg-secondary-game p-2">
-              <div class="btn-group w-100" role="group">
-                <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 fst-game-title" onclick="dowloadImage(this);">
-                  Download card
-                </button>
-                <button type="button" class="btn btn-outline-cyan border-2 border-black rounded-0 fst-game-title" onclick="copyCode(this);">
-                  Copy code
-                </button>
+              <div class="row">
+                <div class="col-md-4 col-xs-12">
+                  <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 w-100 fs-5 fst-game-title" onclick="dowloadImage(this);">
+                    Download card
+                  </button>
+                </div>
+                <div class="col-12 d-md-none">
+                  <hr class="my-2">
+                </div>
+                <div class="col-md-4 col-xs-12">
+                  <button type="button" class="btn btn-outline-cyan border-2 border-black rounded-0 w-100 fs-5 fst-game-title" onclick="copyCode(this);">
+                    Copy code
+                  </button>
+                </div>
               </div>
               <div id="warningsInGame" class="alert bg-yellow-lt border-2 border-yellow rounded-0 mt-3 fst-game d-none" role="alert">
                 <p class="fw-bold">This setup does not match with the rules but it can be played. You maybe need and extra copy of some pieces.</p>
@@ -679,7 +686,7 @@
     screenCoverLoading.classList.add('d-none');
     setTimeout(() => {
       btn.textContent = 'Download card';
-    }, 2000);
+    }, 1500);
   }
 
   const copyCode = async (btn) => {
