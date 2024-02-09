@@ -488,6 +488,7 @@
           const optionals = await pc.getOptionals(game);
           const recoveredGame = await pc.getGameFromCode(code);
           if (!UTILS.objectsAreEquals(game, recoveredGame)) console.warn('Different object games', 'game:', game, 'recoveredGame:', recoveredGame);
+          game.villains = await pc.getMembersOfGroup(game.villains);
           if (notes.errors.length > 0) {
             for (const note of notes.errors) {
               errorsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));

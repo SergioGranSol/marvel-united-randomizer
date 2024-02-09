@@ -387,7 +387,7 @@
             modeDescription += item.players > 1 && item.teamIISize > 0 ? ` VS P${item.code.includes('vSX') || item.code.includes('vC') ? '1' : item.teamIISize}` : '';
             modeDescription += item.players > 1 && item.superVillainMode == 1 ? ' VS P1' : '';
             modeDescription += item.players > 1 ? ')' : '';
-            selectElement.appendChild(elCr(`option[name=${key},value=${item.id},data-villains=${item.villains},data-team-i-size=${item.teamISize},data-team-i-i-size=${item.teamIISize},data-companions-i=${item.teamISize == 5 ? '1' : item.teamISize},data-companions-i-i=${item.teamIISize == 5 ? '1' : item.teamIISize}`, `P${item.players} - ${item.name + (` (P${item.players})` == modeDescription ? '' : modeDescription) }`));
+            selectElement.appendChild(elCr(`option[name=${key},value=${item.id},data-villains=${item.villains},data-team-i-size=${item.teamISize},data-team-i-i-size=${item.teamIISize},data-companions-i=${item.teamISize == 5 ? '1' : item.teamISize},data-companions-i-i=${item.teamIISize == 5 ? '1' : item.teamIISize}`, `P${item.players} - ${item.name + (' (P'+item.players+')' == modeDescription ? '' : modeDescription) }`));
           } else if (key == 'challenges') {
             selectElement.appendChild(elCr(`option[name=${key},value=${item.id}`, item.name));
           } else {

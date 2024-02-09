@@ -95,7 +95,7 @@ class GameUtils {
       const emptyLocations = {0:[]};
       for (let i = 0; i < 6; i++) {
         if (game.locations[i].id == 0) {
-          emptyLocations.push(i + 1);
+          emptyLocations[0].push(i + 1);
         }
       }
       code.push(`${emptyLocations[0].length}`);
@@ -112,6 +112,9 @@ class GameUtils {
       for (const villain of game.villains) {
         if (villain?.id) {
           code.push(villain.id < 100 ? villain.id < 10 ? `00${villain.id}` : `0${villain.id}` : `${villain.id}`);
+          if (villain.id == 43) {
+            code.push(villain.members < 100 ? villain.members < 10 ? `00${villain.members}` : `0${villain.members}` : `${villain.members}`);
+          }
         }
       }
       code.push(`${UTILS.countObjects(game.teamI)}`);
@@ -151,7 +154,8 @@ class GameUtils {
       companionsI: [0, 0, 0, 0],
       companionsII: [0, 0, 0, 0],
       initLocation: 0,
-      challenge: 0
+      challenge: 0,
+      phoenixFiveAligment: 0
     }
     try {
       let position = 0;
@@ -164,7 +168,7 @@ class GameUtils {
       emptyLocations = emptyLocations <= 6 ? emptyLocations : 6;
       const locationsWithId = 6 - emptyLocations;
       const emptyLocationsAux = [];
-      for (let i = 1; i <= emptyLocations; i++) {
+      for (let i = 1; i <= emptyLocations && emptyLocations != 6; i++) {
         emptyLocationsAux.push(Number(code.substring(position, position + 1)));
         position += 1;
       }
@@ -188,6 +192,10 @@ class GameUtils {
       for (let i = 1; i <= villainsSize && i < 7; i++) {
         recoveredGame.villains[i-1] = Number(code.substring(position, position + 3));
         position += 3;
+        if (recoveredGame.villains[i-1] == 43) {
+          recoveredGame.phoenixFiveAligment = Number(code.substring(position, position + 3));
+          position += 3;
+        }
       }
       const teamISize = Number(code.substring(position, position + 1));
       position += 1;

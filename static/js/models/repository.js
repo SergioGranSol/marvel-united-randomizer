@@ -115,10 +115,13 @@ class Repository {
       .and(row => row.heraldsOfGalactus == 1)
       .toArray();
 
-  findPhoenixFive = async (excluded) =>
-    await this.#db.villains
-      .where('id').noneOf(excluded)
-      .and(row => row.phoenixFive == 1)
+  findPhoenixFiveAlignments = async (alignment) =>
+    await this.#db.phoenixFive.filter(row =>
+      (alignment.hasColossus == 0 ? row.hasColossus == 0 : true)
+      && (alignment.hasCyclops == 0 ? row.hasCyclops == 0 : true)
+      && (alignment.hasEmmaFrost == 0 ? row.hasEmmaFrost == 0 : true)
+      && (alignment.hasMagik == 0 ? row.hasMagik == 0 : true)
+      && (alignment.hasNamor == 0 ? row.hasNamor == 0 : true))
       .toArray();
 
   findVillainsByExpansionsAndSuperVillainMode = async (boxes, superVillainMode) =>
@@ -230,5 +233,15 @@ class Repository {
 
   findMembersInVillainGroup = async (villains) =>
     await this.#db.villains.where('id').anyOf(villains).toArray();
+
+  findMembersInPhoenixFive = async (permutationId) => {
+    const alignment = await this.#db.phoenixFive.where('id').equals(permutationId).first();
+    const names = alignment.members.split("&").join(",").split(" ").join("").split(",");
+    const result = [];
+    for (const name of names) {
+      result.push(await this.#db.villains.where('name').equals(name == 'EmmaFrost' ? 'Emma Frost (Phoenix Five)' : (name + ' (Phoenix Five)')).first());
+    }
+    return result;
+  }
 
 }

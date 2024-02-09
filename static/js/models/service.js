@@ -77,13 +77,23 @@ class Service {
   }
 
   getPhoenixFive = async (villains) => {
-    const excludedPhoenixFive = [];
-    for (const phoenixFive of villains) {
-      if (phoenixFive?.id) {
-        excludedPhoenixFive.push(phoenixFive.id);
+    const alignment = { hasColossus: 1, hasCyclops: 1, hasEmmaFrost: 1, hasMagik: 1, hasNamor: 1 };
+    for (const villain of villains) {
+      if (villain?.name?.includes('Phoenix Five')) {
+        if (villain.name == 'Colossus (Phoenix Five)') {
+          alignment.hasColossus = 0;
+        } else if (villain.name == 'Cyclops (Phoenix Five)') {
+          alignment.hasCyclops = 0;
+        } else if (villain.name == 'Emma Frost (Phoenix Five)') {
+          alignment.hasEmmaFrost = 0;
+        } else if (villain.name == 'Magik (Phoenix Five)') {
+          alignment.hasMagik = 0;
+        } else if (villain.name == 'Namor (Phoenix Five)') {
+          alignment.hasNamor = 0;
+        }
       }
     }
-    return await this.#repository.findPhoenixFive(excludedPhoenixFive);
+    return await this.#repository.findPhoenixFiveAlignments(alignment);
   }
 
   countHeroesInExpansions = async (boxes) =>
@@ -160,6 +170,9 @@ class Service {
   }
 
   getMembersInVillainGroup = async (group) =>
-    await this.#repository.findMembersInVillainGroup(group.split(',').map(item => Number(item)))
+    await this.#repository.findMembersInVillainGroup(group.split(',').map(item => Number(item)));
+
+  getMembersInPhoenixFive = async (permutationId) =>
+    await this.#repository.findMembersInPhoenixFive(typeof permutationId === 'string' ? Number(permutationId) : permutationId);
 
 }
