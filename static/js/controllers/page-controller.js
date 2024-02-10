@@ -30,6 +30,8 @@ class PageController {
 
   getAllVillainsForGames = async () => await this.#mus.getAllVillainsForGames();
 
+  getPermutationIdByPhoenixFiveNames = async (members) => await this.#mus.getPermutationIdByPhoenixFiveNames(members);
+
   getCodeGame = async (game) => await this.#gu.getCodeGame(game);
 
   getGameFromCode = async (code) => {
@@ -49,7 +51,7 @@ class PageController {
     game.challenge = recoveredGame.challenge > 0 && recoveredGame.challenge < 22 ? await this.#mus.getChallengeById(recoveredGame.challenge) : {};
     game.initLocation = recoveredGame.initLocation > 0 && recoveredGame.initLocation < 6 ? recoveredGame.initLocation : 0;
     for (let i = 0; i < 6; i++) {
-      game.villains.push(recoveredGame.villains[i] > 0 && recoveredGame.villains[i] < 143 ? await this.#mus.getVillainById(recoveredGame.villains[i]) : {});
+      game.villains.push(recoveredGame.villains[i] > 0 && recoveredGame.villains[i] < 145 ? await this.#mus.getVillainById(recoveredGame.villains[i]) : {});
       game.locations.push(recoveredGame.locations[i] > 0 && recoveredGame.locations[i] < 126 ? await this.#mus.getLocationById(recoveredGame.locations[i]) : {
         id: 0,
         name: 'Any location',
@@ -66,8 +68,10 @@ class PageController {
       game.companionsI.push(recoveredGame.companionsI[i] > 0 && recoveredGame.companionsI[i] < 8 ? await this.#mus.getCompanionById(recoveredGame.companionsI[i]) : {});
       game.companionsII.push(recoveredGame.companionsII[i] > 0 && recoveredGame.companionsII[i] < 8 ? await this.#mus.getCompanionById(recoveredGame.companionsII[i]) : {});
     }
-    if (game.mode.villains == 1 && game.villains[0]?.members.length > 2) {
-      game.villains[0].members = await this.#mus.getMembersInVillainGroup(game.villains[0].members);
+    for (const villain of game.villains) {
+      if (villain.name == 'Phoenix Five') {
+        villain.members = `${recoveredGame.phoenixFiveAligment}`;
+      }
     }
     return game;
   }
@@ -79,6 +83,17 @@ class PageController {
       teamDecksII = await this.#mus.getTeamsByHeroes(game.teamII);
     }
     return { teamDecksI: teamDecksI, teamDecksII: teamDecksII };
+  }
+
+  getMembersOfGroup = async (gameVillains) => {
+    for (const villain of gameVillains) {
+      if (villain?.members && villain.members != '0') {
+        villain.members = villain.name == 'Phoenix Five'
+          ? await this.#mus.getPhoenixFivePermutationById(villain.members)
+          : await this.#mus.getMembersInVillainGroup(villain.members);
+      }
+    }
+    return gameVillains;
   }
 
   validateConfig = async (settings) => {
@@ -203,10 +218,6 @@ class PageController {
     game.locations = locations;
     game.initLocation = await this.#getInitLocation(game.villains, game.locations);
 
-    if (game.mode.villains == 1 && game.villains[0]?.members.length > 2) {
-      game.villains[0].members = await this.#mus.getMembersInVillainGroup(game.villains[0].members);
-    }
-
     return { error: false, game, randomizeErrorMessage: '' };
   }
 
@@ -226,15 +237,32 @@ class PageController {
     const villainsAsObj = UTILS.arrayToObject(villains);
     for (let i = 0; i < gameMode.villains; i++) {
       chosenVillains[i] = UTILS.getRandomKey(villainsAsObj);
+      if (chosenVillains[i].name == 'Phoenix Five') {
+        const phoenixFiveAlignments = await this.#mus.getPhoenixFive(chosenVillains);
+        const phoenixFiveMembers = UTILS.getRandomKey(UTILS.arrayToObject(phoenixFiveAlignments));
+        chosenVillains[i].members = `${phoenixFiveMembers.id}`;
+        if (phoenixFiveMembers.hasColossus != 0) {
+          delete villainsAsObj[phoenixFiveMembers.hasColossus];
+        }
+        if (phoenixFiveMembers.hasCyclops != 0) {
+          delete villainsAsObj[phoenixFiveMembers.hasCyclops];
+        }
+        if (phoenixFiveMembers.hasEmmaFrost != 0) {
+          delete villainsAsObj[phoenixFiveMembers.hasEmmaFrost];
+        }
+        if (phoenixFiveMembers.hasMagik != 0) {
+          delete villainsAsObj[phoenixFiveMembers.hasMagik];
+        }
+        if (phoenixFiveMembers.hasNamor != 0) {
+          delete villainsAsObj[phoenixFiveMembers.hasNamor];
+        }
+      }
       delete villainsAsObj[chosenVillains[i].id];
     }
-    if (gameMode.villains == 1 && chosenVillains[0].phoenixFive == 1) {
-      const phoenixFive = UTILS.arrayToObject(await this.#mus.getPhoenixFive(chosenVillains));
-      const numberOfPhoenixFive = UTILS.getRandomNumber(5) + 1;
-      for (let i = 1; i < numberOfPhoenixFive; i++) {
-        chosenVillains[i] = UTILS.getRandomKey(phoenixFive);
-        delete phoenixFive[chosenVillains[i].id];
-      }
+
+    if (UTILS.countObjects(chosenVillains) < gameMode.villains) {
+      console.warn('Changing game mode cause there\'s no enough villains after chosing Phoenix Five');
+      return await this.#changeGameMode(modes, gameMode, settings);
     }
 
     const chosenTeamI = [{},{},{},{},{}];

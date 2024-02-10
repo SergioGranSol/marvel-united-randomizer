@@ -273,6 +273,16 @@
         </div>
       </div>
     </div>
+    <footer class="footer footer-transparent bg-blue-lt py-2 px-5 border bordet-end-0 border-x-0 border-3">
+      <div class="row justify-content-between fw-bold">
+        <div class="col fs-6 fst-game">
+          All related characters are the property of Marvel.
+          Game ideas are property of CMON.
+          This fanart page is for entertainment purposes only.
+        </div>
+        <div class="col text-end fst-game-title">v1.0</div>
+      </div>
+    </footer>
   </div>
   <div class="position-fixed top-0 start-0 vw-100 vh-100" id="loadingScreen">
     <div class="position-absolute top-50 start-50 translate-middle bg-blue border border-3 border-black rounded-3 p-3">
@@ -335,7 +345,7 @@
 
         gallery[characters].container.lastElementChild.appendChild(
           elCr(`.col-auto${characters != 'boxes' ? '['+filters+']' : ''}`, [
-            elCr(`a.avatar.avatar-xl.p-0.border-0[data-fslightbox=${characters},data-width=${characters=='boxes'?'700':'680'},data-height=${characters=='boxes'?'700':'709'},href=static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png]`, [
+            elCr(`a.avatar.avatar-xl.p-0.border-0[data-fslightbox=${characters},data-fslightbox-backup=${characters},data-width=${characters=='boxes'?'700':'680'},data-height=${characters=='boxes'?'700':'709'},href=static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png]`, [
               elCr(`span.avatar.avatar-xl${characters=='boxes'?'':'.avatar-mu-xl'}.border.border-2.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png')]`),
               elCr(`span.badge.badge-item.bg-${gallery[characters].color}.rounded-0.border.border-2.border-black.fst-game-title.w-100.text-white${item.name.length>17?'.text-wrap.fs-7':'.fs-6'}`, item.name),
               ((characters == 'heroes' || characters == 'antiHeroes') && (item?.isFF || item?.equipments))
@@ -379,10 +389,13 @@
       }
       if (meetsConditions) {
         item.classList.remove('d-none');
+        item.firstElementChild.setAttribute('data-fslightbox', item.dataset.fslightboxBackup);
       } else {
         item.classList.add('d-none');
+        item.firstElementChild.removeAttribute('data-fslightbox');
       }
     }
+    refreshFsLightbox();
   }
 
   buildPage();

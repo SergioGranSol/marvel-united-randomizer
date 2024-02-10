@@ -22,7 +22,8 @@ class DataBase {
       teams: CONSTANTS.TEAMS[0].replaceAll('\t',','),
       villains: CONSTANTS.VILLAINS[0].replaceAll('\t',','),
       relchallengebox: CONSTANTS.RELCHALLENGEBOX[0].replaceAll('\t',','),
-      relteamsheroes: CONSTANTS.RELTEAMSHEROES[0].replaceAll('\t',',')
+      relteamsheroes: CONSTANTS.RELTEAMSHEROES[0].replaceAll('\t',','),
+      phoenixFive: CONSTANTS.PHOENIXFIVE[0].replaceAll('\t',','),
     });
 
     for (let i = 1; i < CONSTANTS.BOXES.length; i++) {
@@ -89,6 +90,12 @@ class DataBase {
       const row = CONSTANTS.RELTEAMSHEROES[i].split('\t');
       let column = 0;
       this.#db.relteamsheroes.put({ id: Number(row[column++]), team: Number(row[column++]), hero: Number(row[column++]) });
+    }
+
+    for (let i = 1; i < CONSTANTS.PHOENIXFIVE.length; i++) {
+      const row = CONSTANTS.PHOENIXFIVE[i].split('\t');
+      let column = 0;
+      this.#db.phoenixFive.put({ id: Number(row[column++]), members: row[column++], hasColossus: Number(row[column++]), hasCyclops: Number(row[column++]), hasEmmaFrost: Number(row[column++]), hasMagik: Number(row[column++]), hasNamor: Number(row[column++]) });
     }
   }
 

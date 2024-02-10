@@ -13,7 +13,7 @@ class CardBuilder {
     this.#card.querySelector('[card-section="challenge"]').textContent = game.challenge?.name || 'No challenge';
     this.#setLocations(game);
     this.#setTeamDecks(optionals, 'blue');
-    this.#setTeam('blue', game.teamI, game.mode.teamISize, game.companionsI);
+    this.#setTeam('blue', game.teamI, game.mode.teamISize, game.companionsI, game.mode.teamISize == 5);
     if (game.mode.teams == 2) {
       this.#card.querySelector('[card-section="blue-team"]').firstElementChild.textContent = 'Blue Team';
       this.#card.querySelector('[card-section="blue-team-inidicator"]').classList.remove('d-none');
@@ -21,7 +21,7 @@ class CardBuilder {
       this.#card.querySelectorAll(`[card-section="${game.mode.villains == 0 ? 'red' : 'yellow'}-team-optionals"]`).forEach(item => item.classList.remove('d-none'));
       this.#card.querySelectorAll(`[card-section="${game.mode.villains == 0 ? 'yellow' : 'red'}-team-optionals"]`).forEach(item => item.classList.add('d-none'));
       this.#setTeamDecks(optionals, game.mode.villains == 0 ? 'red' : 'yellow');
-      this.#setTeam(game.mode.villains == 0 ? 'red' : 'yellow', game.teamII, game.mode.teamIISize, game.companionsII);
+      this.#setTeam(game.mode.villains == 0 ? 'red' : 'yellow', game.teamII, game.mode.teamIISize, game.companionsII, game.mode.teamIISize == 5);
       if (game.mode.villains > 0) {
         this.#card.querySelector('[card-section="yellow-team"]').classList.remove('d-none');
         this.#card.querySelector('[card-section="red-team"]').firstElementChild.textContent = 'Villain(s)';
@@ -36,7 +36,10 @@ class CardBuilder {
       this.#card.querySelector('[card-section="yellow-team"]').classList.add('d-none');
     }
     if (game.mode.villains > 0) {
-      this.#setTeam('red', typeof game.villains[0].members == 'string' ? game.villains : game.villains[0].members , typeof game.villains[0].members == 'string' ? game.mode.villains : game.villains[0].members.length , []);
+      this.#setTeam('red',
+        typeof game.villains[0].members != 'string' && game.mode.villains == 1 ? game.villains[0].members : game.villains,
+        typeof game.villains[0].members != 'string' && game.mode.villains == 1 ? game.villains[0].members.length : game.mode.villains,
+        [], game.mode.villains == 1 && game.villains[0].name == 'Phoenix Five');
     }
     this.#card.querySelector('[card-section="code"]').textContent = code;
     this.#card.querySelector('[name="card-code"]').value = code;
@@ -92,7 +95,7 @@ class CardBuilder {
     }
   }
 
-  #setTeam = (team, items, size, companions) => {
+  #setTeam = (team, items, size, companions, hasMain) => {
     const teamSection = this.#card.querySelector(`[card-section="${team}-team"]`);
     const teamCharacters = teamSection.lastElementChild;
     teamSection.classList.remove('cols-1-section', 'cols-2-section');
@@ -116,11 +119,24 @@ class CardBuilder {
         } else {
           companionPositionStyles = 'background-position: 50% 50%;';
         }
+        let phoenixFiveBox = null;
+        if (items[i].name == 'Phoenix Five') {
+          const sidekicks = [];
+          for (let j = 1; j < items[i].members.length; j++) {
+            const height = items[i].members.length == 5 ? '.h-25' : items[i].members.length == 4 ? '.h-33' : items[i].members.length == 3 ? '.h-50' : '.h-100';
+            sidekicks.push(elCr(`span.col${height}.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0.border-start-0.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/PhoenixFive${UTILS.removeChars(items[i].members[j].name)}${items[i].members.length>2?items[i].members.length:''}.png')]`));
+          }
+          phoenixFiveBox = elCr('.row.row-cols-2.g-0.w-100[style=height: calc(100% - 15px);margin-bottom: 14px;]', [
+            elCr(`span.col.w-50.h-100.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0.border-start-0.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/PhoenixFive${UTILS.removeChars(items[i].members[0].name)}.png')]`),
+            elCr('div.col.row.row-cols-1.g-0.h-100', sidekicks)
+          ]);
+        }
         teamCharacters.appendChild(
           elCr('.col', [
             elCr('.avatar.avatar-xl.p-0.border-0', [
-              elCr(`span.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/${UTILS.removeChars(items[i].name)}.png')]`),
-              elCr(`span.badge.badge-item.bg-${size==5&&i>0?'dark-lt':team}.rounded-0.border.border-2.border-bottom-0${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.fst-game-title.w-100.text-white.shadow-none${items[i].name.length>17?'.text-wrap.fs-7':'.fs-6'}`, items[i].name),
+              (items[i].name == 'Phoenix Five') ? phoenixFiveBox
+              : elCr(`span.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/${UTILS.removeChars(items[i].name)}.png')]`),
+              elCr(`span.badge.badge-item.bg-${hasMain&&i>0?'dark-lt':team}.rounded-0.border.border-2.border-bottom-0${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.fst-game-title.w-100.text-white.shadow-none${items[i].name.length>17?'.text-wrap.px-3.fs-7':'.fs-6'}`, items[i].name),
               (companions[i]?.id && ((size == 5 && i == 0) || size < 5))
               ? elCr('.position-absolute.start-0.bottom-0.fst-game-title.fs-6[style=margin-bottom:16px;]', [
                 elCr('.d-inline.bg-orange.border.border-2.border-start-0.border-bottom-0.border-black.text-white.fs-7.p-0[style=padding:.15rem!important;]', [
