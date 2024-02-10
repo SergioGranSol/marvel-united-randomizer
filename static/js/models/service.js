@@ -172,7 +172,10 @@ class Service {
   getMembersInVillainGroup = async (group) =>
     await this.#repository.findMembersInVillainGroup(group.split(',').map(item => Number(item)));
 
-  getMembersInPhoenixFive = async (permutationId) =>
-    await this.#repository.findMembersInPhoenixFive(typeof permutationId === 'string' ? Number(permutationId) : permutationId);
+  getPhoenixFivePermutationById = async (permutationId) =>
+    await this.#repository.findPhoenixFivePermutationById(typeof permutationId === 'string' ? Number(permutationId) : permutationId);
+
+  getPermutationIdByPhoenixFiveNames = async (members) =>
+    await this.#repository.findPermutationIdByPhoenixFiveNames(members);
 
 }

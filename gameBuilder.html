@@ -134,6 +134,17 @@
                   </select>
                 </div>
               </div>
+              <div class="col-12 d-none" data-game-builder-section="phoenix-five">
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Phoenix Five: </div>
+                <hr class="my-1">
+                <div class="input-group mb-1">
+                  <div class="dropdown-menu overflow-y-scroll mb-2 w-100 selected-values" data-set="phoenix-five"></div>
+                  <div class="border border-2 border-bottom-0 form-control border-black rounded-0 w-100 pb-1 px-2" data-set-values="phoenix-five" data-max-values="5"></div>
+                  <button type="button" class="form-select form-select-sm border-2 border-top-0 border-black bg-white rounded-0 fst-game fw-bold text-start" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Select villain(s)
+                  </button>
+                </div>
+              </div>
               <div class="col-md-6 col-sm-12">
                 <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> <span data-team-label="teamISize">Heroes</span> ( <span data-max-values-label="teamISize">_</span> ): </div>
                 <hr class="my-1">
@@ -244,7 +255,7 @@
           <div class="position-relative">
             <div class="border-double bg-secondary-game p-2">
               <div class="row">
-                <div class="col-md-4 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                   <button type="button" class="btn btn-outline-blue border-2 border-black rounded-0 w-100 fs-5 fst-game-title" onclick="dowloadImage(this);">
                     Download card
                   </button>
@@ -252,7 +263,7 @@
                 <div class="col-12 d-md-none">
                   <hr class="my-2">
                 </div>
-                <div class="col-md-4 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                   <button type="button" class="btn btn-outline-cyan border-2 border-black rounded-0 w-100 fs-5 fst-game-title" onclick="copyCode(this);">
                     Copy code
                   </button>
@@ -395,6 +406,12 @@
               elCr(`input.form-check-input.m-0.me-2.border.border-2.border-muted.rounded-0[type=checkbox,name=${selectElement.dataset.set},value=${item.id},onchange=setMultipleSelectValues(this);]`),
               elCr('span', item.name)
             ]));
+            if (key == 'villains' && item.name.includes('(Phoenix Five)')) {
+              document.querySelector('[data-set="phoenix-five"]').appendChild(elCr('label.dropdown-item.py-0.fst-game.fw-bold.fs-5', [
+                elCr(`input.form-check-input.m-0.me-2.border.border-2.border-muted.rounded-0[type=checkbox,name=phoenix-five,value=${item.id},onchange=setMultipleSelectValues(this);]`),
+                elCr('span', item.name)
+              ]));
+            }
           }
         }
       }
@@ -406,7 +423,7 @@
   const setMultipleSelectValues = (input) => {
     const values = document.querySelector(`[data-set-values="${input.name}"]`);
     const maxValues = Number(values.dataset.maxValues);
-    const itemPosition = values.nextElementSibling.nextElementSibling;
+    const itemPosition = values.nextElementSibling.nextElementSibling || elCr('select.aux.d-none[value=0]');
     let auxText = '';
     const auxDataset = `data-position=${itemPosition.value},`;
     if (input.name == 'companionsI' || input.name == 'companionsII') {
@@ -417,6 +434,8 @@
       auxText = `${input.nextElementSibling.textContent} as location ${itemPosition.value}`;
     } else if (input.name == 'villains') {
       auxText = `${input.nextElementSibling.textContent} as villain ${itemPosition.value}`;
+    } else {
+      auxText = input.nextElementSibling.textContent;
     }
 
     if (values.childElementCount < maxValues && input.checked) {
@@ -425,11 +444,25 @@
           auxText, elCr('i.fa-solid.fa-close.ms-2')
         ])
       );
-      itemPosition.querySelector(`[value="${itemPosition.value}"]`).disabled = true;
+      const selectValue = itemPosition.querySelector(`[value="${itemPosition.value}"]`);
+      if (selectValue) {
+        selectValue.disabled = true;
+      }
+      if (auxText.includes('Phoenix Five') && input.value == 43) {
+        document.querySelector('[data-game-builder-section="phoenix-five"]').classList.remove('d-none');
+        clearPhoenixFive();
+      }
     } else if (!input.checked) {
       const elementToRemove = values.querySelector(`[data-id="${input.value}"]`);
-      itemPosition.querySelector(`[value="${elementToRemove.dataset.position}"]`).disabled = false;
+      const selectValue = itemPosition.querySelector(`[value="${elementToRemove.dataset.position}"]`);
+      if (selectValue) {
+        selectValue.disabled = false;
+      }
       elementToRemove.remove();
+      if (auxText.includes('Phoenix Five') && input.value == 43) {
+        document.querySelector('[data-game-builder-section="phoenix-five"]').classList.add('d-none');
+        clearPhoenixFive();
+      }
     }
     checkSet(document.querySelectorAll(`[name="${input.name}"]`), values);
   }
@@ -439,7 +472,13 @@
     value.checked = false;
     const values = document.querySelector(`[data-set-values="${selectedValue.dataset.value}"]`);
     const itemPosition = values.nextElementSibling.nextElementSibling;
-    itemPosition.querySelector(`[value="${selectedValue.dataset.position}"]`).disabled = false;
+    if (itemPosition) {
+      itemPosition.querySelector(`[value="${selectedValue.dataset.position}"]`).disabled = false;
+    }
+    if (selectedValue.textContent.includes('Phoenix Five') && selectedValue.dataset.id == 43) {
+      document.querySelector('[data-game-builder-section="phoenix-five"]').classList.add('d-none');
+      clearPhoenixFive();
+    }
     selectedValue.remove();
     checkSet(document.querySelectorAll(`[name="${selectedValue.dataset.value}"]`), values);
   }
@@ -457,10 +496,12 @@
       }
     }
     const itemPosition = values.nextElementSibling.nextElementSibling;
-    for (const position of itemPosition.children) {
-      if (!position.disabled) {
-        position.selected = true;
-        break;
+    if (itemPosition?.children) {
+      for (const position of itemPosition.children) {
+        if (!position.disabled) {
+          position.selected = true;
+          break;
+        }
       }
     }
   }
@@ -505,6 +546,8 @@
         childrens[i].disabled = Number(selectedMode.dataset[key]) < (i + 1);
       }
     }
+    document.querySelector('[data-game-builder-section="phoenix-five"]').classList.add('d-none');
+    clearPhoenixFive();
     let inputNames = document.querySelectorAll('[data-team-label="teamISize"]');
     for (const inputName of inputNames) {
       inputName.textContent = selectedMode.dataset.teamIISize == 0 ? 'Heores' : 'Blue Team';
@@ -527,6 +570,16 @@
         items.classList.remove('d-none');
       }
     }
+    document.getElementById('errorMessage').classList.add('d-none');
+  }
+
+  const clearPhoenixFive = () => {
+    document.querySelector('[data-set-values="phoenix-five"]').replaceChildren();
+    const valuesSet = document.querySelectorAll('[name="phoenix-five"]');
+    for (const checkbox of valuesSet) {
+      checkbox.disabled = false;
+      checkbox.checked = false;
+    }
   }
 
   const getGameFromCode = async () => {
@@ -545,6 +598,7 @@
         const game = await pc.getGameFromCode(code);
         const notes = await pc.validateGame(game);
         const optionals = await pc.getOptionals(game);
+        game.villains = await pc.getMembersOfGroup(game.villains);
         if (notes.errors.length > 0) {
           for (const note of notes.errors) {
             errorsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));
@@ -594,19 +648,30 @@
       const selectedMode = selectElement.querySelector(`option[value="${selectElement.value}"]`);
       const villains = [...document.querySelector('[data-set-values="villains"]').querySelectorAll('[data-id]')].sort((a, b) => a.dataset.position - b.dataset.position).map(ele => Number(ele.dataset.id));
       if (villains.length != selectedMode.dataset.villains) {
-        errorMessage.lastElementChild.textContent = 'Villains not chosen.';
+        errorMessage.lastElementChild.textContent = `You must chose ${selectedMode.dataset.villains} villains.`;
         errorMessage.classList.remove('d-none');
         return;
       }
+
+      let phoenixFive = [];
+      if (villains.includes(43)) {
+        phoenixFive = [...document.querySelector('[data-set-values="phoenix-five"]').querySelectorAll('[data-id]')];
+        if (phoenixFive.length < 2) {
+          errorMessage.lastElementChild.textContent = 'Chose at least two Phoenix Five members.';
+          errorMessage.classList.remove('d-none');
+          return;
+        }
+      }
+
       const teamI = [...document.querySelector('[data-set-values="teamISize"]').querySelectorAll('[data-id]')].sort((a, b) => a.dataset.position - b.dataset.position).map(ele => Number(ele.dataset.id));
       if (teamI.length != selectedMode.dataset.teamISize) {
-        errorMessage.lastElementChild.textContent = 'Heroes not chosen.';
+        errorMessage.lastElementChild.textContent = `You must chose ${selectedMode.dataset.teamISize} heroes${selectedMode.dataset.teamIISize > 0 ? ' for first team' : ''}.`;
         errorMessage.classList.remove('d-none');
         return;
       }
       const teamII = [...document.querySelector('[data-set-values="teamIISize"]').querySelectorAll('[data-id]')].sort((a, b) => a.dataset.position - b.dataset.position).map(ele => Number(ele.dataset.id));
       if (teamII.length != selectedMode.dataset.teamIISize) {
-        errorMessage.lastElementChild.textContent = 'Heroes not chosen in second team.';
+        errorMessage.lastElementChild.textContent = `You must chose ${selectedMode.dataset.teamISize} heroes for second team.`;
         errorMessage.classList.remove('d-none');
         return;
       }
@@ -614,10 +679,13 @@
       code.push(selectedMode.value < 10 ? `0${selectedMode.value}` : `${selectedMode.value}`);
       code.push(`${document.querySelector('input[name="initLocation"]:checked').value - 1}`);
       const locations = [...document.querySelector('[data-set-values="locations"]').querySelectorAll('[data-id]')].reduce((acc, ele) => {acc[ele.dataset.position] = Number(ele.dataset.id); return acc;}, {});
-      code.push(6 - Object.keys(locations).length);
-      for (let i = 1; i <= 6; i++) {
-        if (!locations.hasOwnProperty(i)) {
-          code.push(i);
+      const emptyLocations = 6 - Object.keys(locations).length;
+      code.push(emptyLocations);
+      if (emptyLocations < 6) {
+        for (let i = 1; i <= 6; i++) {
+          if (!locations.hasOwnProperty(i)) {
+            code.push(i);
+          }
         }
       }
       for (const location in locations) {
@@ -630,6 +698,14 @@
       code.push(villains.length);
       for (let i = 0; i < selectedMode.dataset.villains; i++) {
         code.push(villains[i] < 100 ? villains[i] < 10 ? `00${villains[i]}` : `0${villains[i]}` : `${villains[i]}`);
+        if (villains[i] == 43) {
+          let phoenixFiveAligment = '';
+          for (const item of phoenixFive) {
+            phoenixFiveAligment += item.textContent.replace(' (Phoenix Five)', '') + ', ';
+          }
+          const permutation = await pc.getPermutationIdByPhoenixFiveNames(UTILS.replaceLast(phoenixFiveAligment.slice(0, -2), ', ', ' & '));
+          code.push(permutation.id < 100 ? permutation.id < 10 ? `00${permutation.id}` : `0${permutation.id}` : `${permutation.id}`);
+        }
       }
       const companionsI = [...document.querySelector('[data-set-values="companionsI"]').querySelectorAll('[data-id]')].reduce((acc, ele) => { acc[ele.dataset.position] = Number(ele.dataset.id); return acc; }, {});
       code.push(teamI.length);
@@ -650,6 +726,7 @@
       const game = await pc.getGameFromCode(code.join(""));
       const notes = await pc.validateGame(game);
       const optionals = await pc.getOptionals(game);
+      game.villains = await pc.getMembersOfGroup(game.villains);
       if (notes.errors.length > 0) {
         for (const note of notes.errors) {
           errorsInGame.lastElementChild.appendChild(elCr("p.m-0", note));

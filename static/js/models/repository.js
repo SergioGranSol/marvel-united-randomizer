@@ -234,7 +234,7 @@ class Repository {
   findMembersInVillainGroup = async (villains) =>
     await this.#db.villains.where('id').anyOf(villains).toArray();
 
-  findMembersInPhoenixFive = async (permutationId) => {
+  findPhoenixFivePermutationById = async (permutationId) => {
     const alignment = await this.#db.phoenixFive.where('id').equals(permutationId).first();
     const names = alignment.members.split("&").join(",").split(" ").join("").split(",");
     const result = [];
@@ -242,6 +242,10 @@ class Repository {
       result.push(await this.#db.villains.where('name').equals(name == 'EmmaFrost' ? 'Emma Frost (Phoenix Five)' : (name + ' (Phoenix Five)')).first());
     }
     return result;
+  }
+
+  findPermutationIdByPhoenixFiveNames = async (members) => {
+    return await this.#db.phoenixFive.where('members').equals(members).first();
   }
 
 }

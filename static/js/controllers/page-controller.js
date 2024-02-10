@@ -30,6 +30,8 @@ class PageController {
 
   getAllVillainsForGames = async () => await this.#mus.getAllVillainsForGames();
 
+  getPermutationIdByPhoenixFiveNames = async (members) => await this.#mus.getPermutationIdByPhoenixFiveNames(members);
+
   getCodeGame = async (game) => await this.#gu.getCodeGame(game);
 
   getGameFromCode = async (code) => {
@@ -87,7 +89,7 @@ class PageController {
     for (const villain of gameVillains) {
       if (villain?.members && villain.members != '0') {
         villain.members = villain.name == 'Phoenix Five'
-          ? await this.#mus.getMembersInPhoenixFive(villain.members)
+          ? await this.#mus.getPhoenixFivePermutationById(villain.members)
           : await this.#mus.getMembersInVillainGroup(villain.members);
       }
     }
