@@ -100,7 +100,8 @@ class Repository {
   findTvTVillain = async (boxes) =>
     await this.#db.villains
       .where('box').anyOf(boxes)
-      .and(row => row.teamVsTeam == 1)
+      .and(row => row.teamVsTeam == 1
+        && row.members != '-1')
       .toArray();
 
   findDarkAvengers = async (boxes) =>
@@ -112,7 +113,8 @@ class Repository {
   findHeraldsOfGalactus = async (boxes) =>
     await this.#db.villains
       .where('box').anyOf(boxes)
-      .and(row => row.heraldsOfGalactus == 1)
+      .and(row => row.heraldsOfGalactus == 1
+        && row.members != '-1')
       .toArray();
 
   findPhoenixFiveAlignments = async (alignment) =>
