@@ -119,10 +119,23 @@ class CardBuilder {
         } else {
           companionPositionStyles = 'background-position: 50% 50%;';
         }
+        let phoenixFiveBox = null;
+        if (items[i].name == 'Phoenix Five') {
+          const sidekicks = [];
+          for (let j = 1; j < items[i].members.length; j++) {
+            const height = items[i].members.length == 5 ? '.h-25' : items[i].members.length == 4 ? '.h-33' : items[i].members.length == 3 ? '.h-50' : '.h-100';
+            sidekicks.push(elCr(`span.col${height}.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0.border-start-0.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/PhoenixFive${UTILS.removeChars(items[i].members[j].name)}${items[i].members.length>2?items[i].members.length:''}.png')]`));
+          }
+          phoenixFiveBox = elCr('.row.row-cols-2.g-0.w-100[style=height: calc(100% - 15px);margin-bottom: 14px;]', [
+            elCr(`span.col.w-50.h-100.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0.border-start-0.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/PhoenixFive${UTILS.removeChars(items[i].members[0].name)}.png')]`),
+            elCr('div.col.row.row-cols-1.g-0.h-100', sidekicks)
+          ]);
+        }
         teamCharacters.appendChild(
           elCr('.col', [
             elCr('.avatar.avatar-xl.p-0.border-0', [
-              elCr(`span.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/${UTILS.removeChars(items[i].name)}.png')]`),
+              (items[i].name == 'Phoenix Five') ? phoenixFiveBox
+              : elCr(`span.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/${UTILS.removeChars(items[i].name)}.png')]`),
               elCr(`span.badge.badge-item.bg-${hasMain&&i>0?'dark-lt':team}.rounded-0.border.border-2.border-bottom-0${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.fst-game-title.w-100.text-white.shadow-none${items[i].name.length>17?'.text-wrap.px-3.fs-7':'.fs-6'}`, items[i].name),
               (companions[i]?.id && ((size == 5 && i == 0) || size < 5))
               ? elCr('.position-absolute.start-0.bottom-0.fst-game-title.fs-6[style=margin-bottom:16px;]', [

@@ -23,6 +23,34 @@ class GameUtils {
     if (new Set(game.locations.filter(item => item?.id).map(item => item.id)).size < game.locations.filter(item => item?.id).length) {
       message.warnings.push('This game has duplicate locations.');
     }
+
+    const teamIids = game.teamI.filter(item => item?.id).map(item => item.id);
+    const teamIIids = game.teamII.filter(item => item?.id).map(item => item.id);
+    for (const item of teamIids) {
+      if (teamIIids.includes(item)) {
+        message.warnings.push('Some heroes are members of both team I and team II.');
+        break;
+      }
+    }
+
+    const villainsIds = game.villains.filter(item => item?.id).map(item => item.id);
+    const antiheroes = [...game.teamI.filter(item => item?.isAntiHero).map(item => item.isAntiHero), ...game.teamII.filter(item => item?.isAntiHero).map(item => item.isAntiHero)];
+    for (const item of villainsIds) {
+      if (antiheroes.includes(item)) {
+        message.warnings.push('Some anti heroes are members of both heores and villains.');
+        break;
+      }
+    }
+
+    const companionsIids = game.companionsI.filter(item => item?.id).map(item => item.id);
+    const companionsIIids = game.companionsII.filter(item => item?.id).map(item => item.id);
+    for (const item of companionsIids) {
+      if (companionsIIids.includes(item)) {
+        message.warnings.push('Some companions are members of both team I and team II.');
+        break;
+      }
+    }
+
     const hasThanos = game.villains[game.villains.findIndex(villain => villain.name === 'Thanos')];
     if (hasThanos && game.locations.some(location => location.hasVillain != hasThanos.id)) {
       message.warnings.push('Thanos must used all Thanos Locations.');
@@ -44,6 +72,20 @@ class GameUtils {
     && (((game.initLocation + 3) % 6) != game.locations.findIndex(location => location.name == 'Loomworld')
     || game.initLocation != game.locations.findIndex(location => location.name == 'Sims Tower'))) {
       message.warnings.push('Morlun must start in Loomworld and Heroes in Sims Tower.');
+    }
+
+    const hasPhoenixFive = game.villains[game.villains.findIndex(villain => villain.name === 'Phoenix Five')];
+    if (hasPhoenixFive) {
+      if (new Set(hasPhoenixFive.members.filter(item => item?.id).map(item => item.id)).size < hasPhoenixFive.members.filter(item => item?.id).length) {
+        message.warnings.push('This game has duplicate Phoenix Five members.');
+      }
+      const villainsNames = game.villains.filter(item => item?.name).map(item => item.name);
+      for (const item of villainsNames) {
+        if (item.includes(' (Phoenix Five)')) {
+          message.warnings.push('Some Phoenix Five members are both Phoenix Five and normal villain.');
+          break;
+        }
+      }
     }
 
     for (const villain of game.villains) {

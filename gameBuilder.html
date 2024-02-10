@@ -270,7 +270,7 @@
                 </div>
               </div>
               <div id="warningsInGame" class="alert bg-yellow-lt border-2 border-yellow rounded-0 mt-3 fst-game d-none" role="alert">
-                <p class="fw-bold">This setup does not match with the rules but it can be played. You maybe need and extra copy of some pieces.</p>
+                <p class="fw-bold">This setup does not match with the rules but it can be played. You maybe need an extra copy of some pieces.</p>
                 <div>Warning here</div>
               </div>
               <div id="errorsInGame" class="alert bg-danger-lt border-2 border-danger rounded-0 mt-3 fst-game d-none" role="alert">
@@ -596,9 +596,9 @@
       screenCoverLoading.classList.remove('d-none');
       try {
         const game = await pc.getGameFromCode(code);
+        game.villains = await pc.getMembersOfGroup(game.villains);
         const notes = await pc.validateGame(game);
         const optionals = await pc.getOptionals(game);
-        game.villains = await pc.getMembersOfGroup(game.villains);
         if (notes.errors.length > 0) {
           for (const note of notes.errors) {
             errorsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));
@@ -724,9 +724,9 @@
         } else code.push('00');
       }
       const game = await pc.getGameFromCode(code.join(""));
+      game.villains = await pc.getMembersOfGroup(game.villains);
       const notes = await pc.validateGame(game);
       const optionals = await pc.getOptionals(game);
-      game.villains = await pc.getMembersOfGroup(game.villains);
       if (notes.errors.length > 0) {
         for (const note of notes.errors) {
           errorsInGame.lastElementChild.appendChild(elCr("p.m-0", note));

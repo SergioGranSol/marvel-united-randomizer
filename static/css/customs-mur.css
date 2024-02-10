@@ -40,6 +40,10 @@
   font-size: 0.4rem!important;
 }
 
+.h-33 {
+  height: 33%!important;
+}
+
 /* BACKGROUNDS */
 
 #loadingScreen {
