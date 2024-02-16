@@ -80,11 +80,9 @@ class GameUtils {
         message.warnings.push('This game has duplicate Phoenix Five members.');
       }
       const villainsNames = game.villains.filter(item => item?.name).map(item => item.name);
-      for (const item of villainsNames) {
-        if (item.includes(' (Phoenix Five)')) {
-          message.warnings.push('Some Phoenix Five members are both Phoenix Five and normal villain.');
-          break;
-        }
+      const phoenixfiveMembers = hasPhoenixFive.members.filter(item => item?.name).map(item => item.name);
+      if (villainsNames.some(r=> phoenixfiveMembers.includes(r))) {
+        message.warnings.push('Some Phoenix Five members are both Phoenix Five and normal villain.');
       }
     }
 
@@ -129,10 +127,11 @@ class GameUtils {
     return message;
   }
 
-  getCodeGame = async (game) => {
-    const code = [];
+  getCodeGame = async (game, phoenixFivePermutation) => {
+    let encodedCode = '';
     try {
-      code.push(game.mode.id < 10 ? `0${game.mode.id}` : `${game.mode.id}`);
+      const code = [];
+      code.push(`${game.mode.id}`);
       code.push(`${game.initLocation}`);
       const emptyLocations = {0:[]};
       for (let i = 0; i < 6; i++) {
@@ -154,8 +153,8 @@ class GameUtils {
       for (const villain of game.villains) {
         if (villain?.id) {
           code.push(villain.id < 100 ? villain.id < 10 ? `00${villain.id}` : `0${villain.id}` : `${villain.id}`);
-          if (villain.id == 43) {
-            code.push(villain.members < 100 ? villain.members < 10 ? `00${villain.members}` : `0${villain.members}` : `${villain.members}`);
+          if (villain.id == 43 && phoenixFivePermutation != 0) {
+            code.push(phoenixFivePermutation < 100 ? phoenixFivePermutation < 10 ? `00${phoenixFivePermutation}` : `0${phoenixFivePermutation}` : `${phoenixFivePermutation}`);
           }
         }
       }
@@ -180,13 +179,33 @@ class GameUtils {
           }
         }
       }
+      let codeAsString = code.join("");
+      while (codeAsString.length % 8 != 0) {
+        codeAsString = '0' + codeAsString;
+      }
+      const codeParts = [];
+      let start = 0;
+      while (start < codeAsString.length) {
+        codeParts.push(codeAsString.substring(start, (start + 8 > codeAsString.length) ? codeAsString.length : (start + 8)));
+        start += 8;
+      }
+      encodedCode = codeParts.map(part => UTILS.encode(part)).join('-');
     } catch (error) {
-      console.log('Invalid game: ', error);
+      console.error('Invalid game: ', error);
     }
-    return code.join("");
+    return encodedCode;
   }
 
   getGameFromCode = async (code) => {
+    code = code.split('-').map((part, index, array) => {
+      part = UTILS.decode(part).toString();
+      if (index > 0) {
+        while (part.length < 8) {
+          part = `0${part}`;
+        }
+      }
+      return part;
+    }).join('');
     const recoveredGame = {
       mode: 0,
       villains: [0, 0, 0, 0, 0, 0],
@@ -201,8 +220,8 @@ class GameUtils {
     }
     try {
       let position = 0;
-      recoveredGame.mode = Number(code.substring(position, position + 2));
-      position += 2;
+      recoveredGame.mode = Number(code.substring(position, position + 3));
+      position += 3;
       recoveredGame.initLocation = Number(code.substring(position, position + 1));
       position += 1;
       let emptyLocations = Number(code.substring(position, position + 1));
@@ -256,7 +275,7 @@ class GameUtils {
         position += 2;
       }
     } catch (error) {
-      console.log('Invalid code game: ', error);
+      console.error('Invalid code game: ', error);
     }
     return recoveredGame;
   }

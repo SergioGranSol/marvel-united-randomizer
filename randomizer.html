@@ -87,7 +87,7 @@
                 </div>
               </div>
               <div class="col-12">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Make teams based on team decks: </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Assemble teams according to the selected decks: </div>
                 <hr class="my-1">
                 <div class="form-selectgroup mb-2">
                   <label class="form-selectgroup-item">
@@ -101,7 +101,7 @@
                 </div>
               </div>
               <div class="col-6">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Include random companions: </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Include random companions from selected expansions: </div>
                 <hr class="my-1">
                 <div class="form-selectgroup mb-2">
                   <label class="form-selectgroup-item">
@@ -115,7 +115,7 @@
                 </div>
               </div>
               <div class="col-6">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Include random challenge: </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Include random challenge from selected expansions: </div>
                 <hr class="my-1">
                 <div class="form-selectgroup mb-2">
                   <label class="form-selectgroup-item">
@@ -143,21 +143,21 @@
                 </div>
               </div>
               <div class="col-6">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Any locations: </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Two-team games: </div>
                 <hr class="my-1">
                 <div class="form-selectgroup mb-2">
                   <label class="form-selectgroup-item">
-                    <input type="radio" name="anyLocation" value="0" class="form-selectgroup-input" checked="">
+                    <input type="radio" name="twoTeamsGame" value="0" class="form-selectgroup-input" checked="">
                     <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
                   </label>
                   <label class="form-selectgroup-item">
-                    <input type="radio" name="anyLocation" value="1" class="form-selectgroup-input">
+                    <input type="radio" name="twoTeamsGame" value="1" class="form-selectgroup-input">
                     <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
                   </label>
                 </div>
               </div>
               <div class="col-6">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Balanced game: </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Assemble teams of the same size in two-team games: </div>
                 <hr class="my-1">
                 <div class="form-selectgroup mb-2">
                   <label class="form-selectgroup-item">
@@ -171,15 +171,15 @@
                 </div>
               </div>
               <div class="col-6">
-                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Two teams game: </div>
+                <div class="border-3 border-start border-red ps-2 fst-game fw-bold"> Build game with selected expansions locations: </div>
                 <hr class="my-1">
                 <div class="form-selectgroup mb-2">
                   <label class="form-selectgroup-item">
-                    <input type="radio" name="twoTeamsGame" value="0" class="form-selectgroup-input" checked="">
+                    <input type="radio" name="anyLocation" value="1" class="form-selectgroup-input">
                     <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">No</span>
                   </label>
                   <label class="form-selectgroup-item">
-                    <input type="radio" name="twoTeamsGame" value="1" class="form-selectgroup-input">
+                    <input type="radio" name="anyLocation" value="0" class="form-selectgroup-input" checked="">
                     <span class="form-selectgroup-label avatar rounded-0 border-2 border-black input-option d-inline-flex fst-game fw-bold fs-5">Yes</span>
                   </label>
                 </div>
@@ -192,7 +192,7 @@
                 </div>
               </div>
               <div class="col-12">
-                <a href="#" class="btn btn-outline-cyan border-2 border-black rounded-0 w-100 fst-game-title" data-bs-toggle="modal" data-bs-target="#modal-options"> Expansions and Teams </a>
+                <a href="#" class="btn btn-outline-cyan border-2 border-black rounded-0 w-100 fst-game-title" data-bs-toggle="modal" data-bs-target="#modal-options"> Select Expansions and Teams </a>
                 <hr class="my-3">
                 <button class="btn btn-outline-red border-2 border-black rounded-0 w-100 fst-game-title" onclick="getNewGame()"> Get game </button>
               </div>
@@ -210,7 +210,7 @@
           Game ideas are property of CMON.
           This fanart page is for entertainment purposes only.
         </div>
-        <div class="col text-end fst-game-title">v1.0</div>
+        <div class="col text-end fst-game-title">v1.1</div>
       </div>
     </footer>
   </div>
@@ -489,16 +489,17 @@
         const warningsInGame = document.getElementById('warningsInGame');
         warningsInGame.lastElementChild.replaceChildren();
         warningsInGame.classList.add('d-none');
-        console.time();
+        // console.time();
         const { error, game, randomizeErrorMessage } = await pc.getRandomizedGame(settings);
         game.villains = await pc.getMembersOfGroup(game.villains);
-        console.timeEnd();
+        // console.timeEnd();
         if (!error) {
           const notes = await pc.validateGame(game);
           const code = await pc.getCodeGame(game);
           const optionals = await pc.getOptionals(game);
-          const recoveredGame = await pc.getGameFromCode(code);
-          if (!UTILS.objectsAreEquals(game, recoveredGame)) console.warn('Different object games', 'game:', game, 'recoveredGame:', recoveredGame);
+          // const recoveredGame = await pc.getGameFromCode(code);
+          // recoveredGame.villains = await pc.getMembersOfGroup(recoveredGame.villains);
+          // if (!UTILS.objectsAreEquals(game, recoveredGame)) console.warn('Different object games', 'game:', game, 'recoveredGame:', recoveredGame);
           if (notes.errors.length > 0) {
             for (const note of notes.errors) {
               errorsInGame.lastElementChild.appendChild(elCr("p.m-0", `- ${note}`));
@@ -515,7 +516,7 @@
           screenCoverLoading.classList.add('d-none');
           modalCard.show();
         } else{
-          console.warn('No game', game);
+          // console.warn('No game', game);
           errorMessage.lastElementChild.textContent = randomizeErrorMessage;
           errorMessage.classList.remove('d-none');
         }

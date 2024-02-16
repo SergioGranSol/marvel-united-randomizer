@@ -11,7 +11,7 @@ class DataBase {
   getDB = () => this.#db;
 
   #create = () => {
-    this.#db.version(1).stores({
+    this.#db.version(2).stores({
       boxes: CONSTANTS.BOXES[0].replaceAll('\t',','),
       challenges: CONSTANTS.CHALLENGES[0].replaceAll('\t',','),
       companions: CONSTANTS.COMPANIONS[0].replaceAll('\t',','),

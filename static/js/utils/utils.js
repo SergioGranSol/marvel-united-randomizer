@@ -1,4 +1,6 @@
 class Utils {
+  #BS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
   getRandomNumber = (max) => Math.floor(Math.random() * max);
 
   arrayToObject = (array) => {
@@ -52,6 +54,28 @@ class Utils {
     if (!match) return str;
     const last = str.lastIndexOf(match);
     return last !== -1 ? `${str.slice(0, last)}${replacement}${str.slice(last + match.length)}` : str;
+  }
+
+  encode = (n) => {
+    const b = this.#BS.length;
+    let res = "";
+    while (n) {
+      res += this.#BS[n % b];
+      n = Math.floor(n / b);
+    }
+    return res.split("").reverse().join("") || "0";
+  }
+
+  decode = (n) => {
+    const b = this.#BS.length;
+    let res = 0;
+    let power = 1;
+    for (let i = n.length - 1; i >= 0; i--) {
+      let index = this.#BS.indexOf(n[i]);
+      res += index * power;
+      power *= b;
+    }
+    return res;
   }
 
 }
