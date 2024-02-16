@@ -244,7 +244,7 @@
           Game ideas are property of CMON.
           This fanart page is for entertainment purposes only.
         </div>
-        <div class="col text-end fst-game-title">v1.0</div>
+        <div class="col text-end fst-game-title">v1.1</div>
       </div>
     </footer>
   </div>
@@ -602,7 +602,7 @@
     warningsInGame.lastElementChild.replaceChildren();
     warningsInGame.classList.add('d-none');
     const code = document.querySelector('[name="codeInput"]').value;
-    if (/^\d+$/.test(code)) {
+    if (/^[\dA-Z-]+$/.test(code)) {
       screenCoverLoading.classList.remove('d-none');
       try {
         const game = await pc.getGameFromCode(code);
@@ -626,7 +626,7 @@
         modalCard.show();
       } catch (error) {
         console.error(error);
-        errorMessage.lastElementChild.textContent = 'Error processing code';
+        errorMessage.lastElementChild.textContent = 'Invalid code';
         errorMessage.classList.remove('d-none');
       } finally {
         screenCoverLoading.classList.add('d-none');
@@ -686,7 +686,7 @@
         return;
       }
 
-      code.push(selectedMode.value < 10 ? `0${selectedMode.value}` : `${selectedMode.value}`);
+      code.push(`${selectedMode.value}`);
       code.push(`${document.querySelector('input[name="initLocation"]:checked').value - 1}`);
       const locations = [...document.querySelector('[data-set-values="locations"]').querySelectorAll('[data-id]')].reduce((acc, ele) => {acc[ele.dataset.position] = Number(ele.dataset.id); return acc;}, {});
       const emptyLocations = 6 - Object.keys(locations).length;
@@ -733,7 +733,19 @@
           code.push(companionsII[i+1] < 10 ? `0${companionsII[i+1]}` : `${companionsII[i+1]}`);
         } else code.push('00');
       }
-      const game = await pc.getGameFromCode(code.join(""));
+
+      let codeAsString = code.join("");
+      while (codeAsString.length % 8 != 0) {
+        codeAsString = '0' + codeAsString;
+      }
+      const codeParts = [];
+      let start = 0;
+      while (start < codeAsString.length) {
+        codeParts.push(codeAsString.substring(start, (start + 8 > codeAsString.length) ? codeAsString.length : (start + 8)));
+        start += 8;
+      }
+      const encodedCode = codeParts.map(part => UTILS.encode(part)).join('-');
+      const game = await pc.getGameFromCode(encodedCode);
       game.villains = await pc.getMembersOfGroup(game.villains);
       const notes = await pc.validateGame(game);
       const optionals = await pc.getOptionals(game);
@@ -749,7 +761,7 @@
         }
         warningsInGame.classList.remove('d-none');
       }
-      cb.buildCard(game, optionals, code.join(""), notes);
+      cb.buildCard(game, optionals, encodedCode, notes);
       screenCoverLoading.classList.add('d-none');
       modalCard.show();
     } catch (error) {

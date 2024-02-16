@@ -6,7 +6,7 @@ class CardBuilder {
   }
 
   buildCard = (game, optionals, code, notes) => {
-    console.log(game);
+    // console.log(game);
     this.#card.classList.remove('flipped');
     this.#card.querySelector('[card-section="card-description"]').textContent = this.#getDescription(game.mode);
     this.#card.querySelector('[card-section="players"]').textContent = game.mode.players;
@@ -124,7 +124,7 @@ class CardBuilder {
           const sidekicks = [];
           for (let j = 1; j < items[i].members.length; j++) {
             const height = items[i].members.length == 5 ? '.h-25' : items[i].members.length == 4 ? '.h-33' : items[i].members.length == 3 ? '.h-50' : '.h-100';
-            sidekicks.push(elCr(`span.col${height}.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0.border-start-0.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/PhoenixFive${UTILS.removeChars(items[i].members[j].name)}${items[i].members.length>2?items[i].members.length:''}.png')]`));
+            sidekicks.push(elCr(`span.col${height}.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0.${size > 3 && i % 2 == 0 ? '.border-start-0' : '.border-x-0'}.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/PhoenixFive${UTILS.removeChars(items[i].members[j].name)}${items[i].members.length>2?items[i].members.length:''}.png')]`));
           }
           phoenixFiveBox = elCr('.row.row-cols-2.g-0.w-100[style=height: calc(100% - 15px);margin-bottom: 14px;]', [
             elCr(`span.col.w-50.h-100.avatar.avatar-xl.avatar-mu-xl.border.border-2.border-bottom-0.border-start-0.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/bio/PhoenixFive${UTILS.removeChars(items[i].members[0].name)}.png')]`),

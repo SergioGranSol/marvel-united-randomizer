@@ -103,7 +103,7 @@ class Service {
     await this.#repository.countHeroesInTeams(teams);
 
   getHeroByName = async (name) =>
-    await this.#repository.getHeroByName(name);
+    await this.#repository.findHeroByName(name);
 
   getHeroesByExpansionsAndNotAntiHero = async (boxes, villains) => {
     const excludedHeroes = [];

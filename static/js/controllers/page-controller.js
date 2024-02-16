@@ -32,7 +32,18 @@ class PageController {
 
   getPermutationIdByPhoenixFiveNames = async (members) => await this.#mus.getPermutationIdByPhoenixFiveNames(members);
 
-  getCodeGame = async (game) => await this.#gu.getCodeGame(game);
+  getCodeGame = async (game) => {
+    const hasPhoenixFive = game.villains[game.villains.findIndex(villain => villain.name === 'Phoenix Five')];
+    if (hasPhoenixFive) {
+      let phoenixFiveAligment = '';
+      for (const item of hasPhoenixFive.members) {
+        phoenixFiveAligment += item.name.replace(' (Phoenix Five)', '') + ', ';
+      }
+      const permutation = await pc.getPermutationIdByPhoenixFiveNames(UTILS.replaceLast(phoenixFiveAligment.slice(0, -2), ', ', ' & '));
+      return await this.#gu.getCodeGame(game, permutation.id);
+    }
+    return await this.#gu.getCodeGame(game, 0);
+  }
 
   getGameFromCode = async (code) => {
     const game = {
@@ -47,7 +58,7 @@ class PageController {
       challenge: {}
     }
     const recoveredGame = await this.#gu.getGameFromCode(code);
-    game.mode = recoveredGame.mode > 0 && recoveredGame.mode < 62 ? await this.#mus.getModeById(recoveredGame.mode) : {};
+    game.mode = recoveredGame.mode > 100 && recoveredGame.mode < 162 ? await this.#mus.getModeById(recoveredGame.mode) : {};
     game.challenge = recoveredGame.challenge > 0 && recoveredGame.challenge < 22 ? await this.#mus.getChallengeById(recoveredGame.challenge) : {};
     game.initLocation = recoveredGame.initLocation > 0 && recoveredGame.initLocation < 6 ? recoveredGame.initLocation : 0;
     for (let i = 0; i < 6; i++) {
@@ -114,34 +125,34 @@ class PageController {
         switch (key) {
           case 'players':
             if (!(value <= 7 && value >= 1)) {
-              console.warn(errorMessages[key] + value);
+              // console.warn(errorMessages[key] + value);
               return { valid: false, message: errorMessages[key] + value };
             }
             break;
           case 'teamFromTeams':
             if (value !== 0 && value !== 1) {
-              console.warn(errorMessages[key] + value);
+              // console.warn(errorMessages[key] + value);
               return { valid: false, message: errorMessages[key] + value };
             }
             if (value === 0 && settings['boxes'].length == 0) {
-              console.warn(errorMessages['boxes']);
+              // console.warn(errorMessages['boxes']);
               return { valid: false, message: errorMessages['boxes'] };
             }
             if (value === 1 && settings['teams'].length == 0) {
-              console.warn(errorMessages['teams']);
+              // console.warn(errorMessages['teams']);
               return { valid: false, message: errorMessages['teams'] };
             }
             break;
           case 'boxes':
           case 'teamDecks':
             if (value.some(item => !Number.isInteger(item))) {
-              console.warn(errorMessages[key] + value.toString());
+              // console.warn(errorMessages[key] + value.toString());
               return { valid: false, message: errorMessages[key] + value.toString() };
             }
             break;
           default:
             if (value !== 0 && value !== 1) {
-              console.warn(errorMessages[key] + value);
+              // console.warn(errorMessages[key] + value);
               return { valid: false, message: errorMessages[key] + value };
             }
         }
@@ -174,26 +185,26 @@ class PageController {
       settings.balanced,
       settings.twoTeamsGame));
     if (Object.keys(modes).length === 0) {
-      console.warn(noGamesModes+'.');
+      // console.warn(noGamesModes+'.');
       return { error: true, game, randomizeErrorMessage: noGamesModes + '.' };
     }
 
     const { gameMode, villains, teamI, teamII } = await this.#getMainSetUp(modes, settings);
     if (Object.keys(gameMode).length === 0) {
-      console.warn(noGamesModes+'.');
+      // console.warn(noGamesModes+'.');
       return { error: true, game, randomizeErrorMessage: noGamesModes + '.' };
     }
     game.mode = gameMode;
 
     if (UTILS.countObjects(game.villains) != game.villains) {
-      console.warn(`${noGamesModes}: You didn't select enough expansions to choose a heroes and villains.`);
+      // console.warn(`${noGamesModes}: You didn't select enough expansions to choose a heroes and villains.`);
       return { error: true, game, randomizeErrorMessage: `${noGamesModes}: You didn't select enough expansions to choose a heroes and villains.` };
     }
     game.villains = villains;
 
     if (UTILS.countObjects(teamI) != game.mode.teamISize
     || UTILS.countObjects(teamII) != game.mode.teamIISize) {
-      console.warn(`${noGamesModes}: You didn't select enough expansions and teams to choose a heroes and villains.`);
+      // console.warn(`${noGamesModes}: You didn't select enough expansions and teams to choose a heroes and villains.`);
       return { error: true, game, randomizeErrorMessage: `${noGamesModes}: You didn't select enough expansions and teams to choose a heroes and villains.` };
     }
     game.teamI = teamI;
@@ -212,7 +223,7 @@ class PageController {
 
     const locations = await this.#getLocations(settings.anyLocation, settings.boxes, game.villains, game.challenge)
     if (settings.anyLocation == 0 && locations.some(location => location.id === 0)) {
-      console.warn(`${noGamesModes}: You didn't select enough expansions to choose locations`);
+      // console.warn(`${noGamesModes}: You didn't select enough expansions to choose locations`);
       return { error: true, game, randomizeErrorMessage: `${noGamesModes}: You didn't select enough expansions to choose locations` };
     }
     game.locations = locations;
@@ -229,7 +240,7 @@ class PageController {
       : await this.#mus.countHeroesInExpansions(settings.boxes);
 
     if (villains.length < gameMode.villains || countHeroes < (gameMode.teamISize + gameMode.teamIISize)) {
-      console.warn('Changing game mode cause there\'s no enough villains and heroes');
+      // console.warn('Changing game mode cause there\'s no enough villains and heroes');
       return await this.#changeGameMode(modes, gameMode, settings);
     }
 
@@ -261,7 +272,7 @@ class PageController {
     }
 
     if (UTILS.countObjects(chosenVillains) < gameMode.villains) {
-      console.warn('Changing game mode cause there\'s no enough villains after chosing Phoenix Five');
+      // console.warn('Changing game mode cause there\'s no enough villains after chosing Phoenix Five');
       return await this.#changeGameMode(modes, gameMode, settings);
     }
 
@@ -272,13 +283,13 @@ class PageController {
       if (heroes.length < (gameMode.teamISize + gameMode.teamIISize)) {
         const swappedSuccess = await this.#swapAntiHero(heroes, gameMode, villainsAsObj, chosenVillains);
         if (!swappedSuccess) {
-          console.warn('Changing game mode cause there\'s no enough heroes after swapping anti heroes');
+          // console.warn('Changing game mode cause there\'s no enough heroes after swapping anti heroes');
           return await this.#changeGameMode(modes, gameMode, settings);
         }
       }
 
       if (heroes.length < (gameMode.teamISize + gameMode.teamIISize)) {
-        console.warn('Changing game mode cause there\'s no enough heroes in expansions');
+        // console.warn('Changing game mode cause there\'s no enough heroes in expansions');
         return await this.#changeGameMode(modes, gameMode, settings);
       }
 
@@ -303,7 +314,7 @@ class PageController {
         teamsAvailable.splice(index, 1);
       }
       if (hereosFromTeamI.length < gameMode.teamISize) {
-        console.warn('Changing game mode cause there\'s no enough heroes in teams for team I');
+        // console.warn('Changing game mode cause there\'s no enough heroes in teams for team I');
         return await this.#changeGameMode(modes, gameMode, settings);
       }
       const hereosFromTeamIAsObj = UTILS.arrayToObject(hereosFromTeamI);
@@ -324,7 +335,7 @@ class PageController {
           teamsAvailable.splice(index, 1);
         }
         if (hereosFromTeamII.length < gameMode.teamIISize) {
-          console.warn('Changing game mode cause there\'s no enough heroes in teams for team II');
+          // console.warn('Changing game mode cause there\'s no enough heroes in teams for team II');
           return await this.#changeGameMode(modes, gameMode, settings);
         }
         const hereosFromTeamIIAsObj = UTILS.arrayToObject(hereosFromTeamII);
@@ -364,16 +375,16 @@ class PageController {
     while (Object.keys(challenges).length > 0 && UTILS.getRandomNumber(2) == 0) {
       let challenge = UTILS.getRandomKey(challenges);
       if (gameMode.code.startsWith('TvT') && (challenge.name === 'Traitor Challenge' || challenge.name === 'Plan B Challenge')) {
-        console.warn('Changing challenge cause can\'t be used with the game mode');
+        // console.warn('Changing challenge cause can\'t be used with the game mode');
         continue;
       }
       if (challenge.name === 'Traitor Challenge' && gameMode.teamISize != 3 && gameMode.teamISize != 4
       && gameMode.teamIISize != 3 && gameMode.teamIISize != 4) {
-        console.warn('Changing challenge cause can\'t be used with the game mode');
+        // console.warn('Changing challenge cause can\'t be used with the game mode');
         continue;
       }
       if (!gameMode.code.startsWith('TvT') && challenge.name === 'Accelerated Villain Challenge') {
-        console.warn('Changing challenge cause can\'t be used with the game mode');
+        // console.warn('Changing challenge cause can\'t be used with the game mode');
         continue;
       }
       return challenge;
@@ -469,7 +480,7 @@ class PageController {
   }
 
   #swapAntiHero = async (heroes, gameMode, villainsAsObj, chosenVillains) => {
-    console.warn('Swapping AntiHero between chosen villains and teams');
+    // console.warn('Swapping AntiHero between chosen villains and teams');
     while (heroes.length < (gameMode.teamISize + gameMode.teamIISize)) {
       if (Object.keys(villainsAsObj).length > 0) {
         const antiHero = chosenVillains.find(antiHero => antiHero.isAntiHero > 0);
@@ -477,7 +488,7 @@ class PageController {
         heroes.push(await this.#mus.getHeroByName(antiHero.name));
         let newVillain = UTILS.getRandomKey(villainsAsObj);
         while (heroes.findIndex(antiHero => antiHero.isAntiHero == newVillain.id) > -1) {
-          console.wanr('New villain can\'t be use cause is already a hero, selecting other villain');
+          // console.wanr('New villain can\'t be use cause is already a hero, selecting other villain');
           delete villainsAsObj[newVillain.id];
           if (Object.keys(villainsAsObj).length > 0) {
             newVillain = UTILS.getRandomKey(villainsAsObj);
