@@ -329,6 +329,7 @@
           }
           filters = `data-set=${characters},`;
           filters += `data-box=${item.box},`
+          filters += `data-fslightbox-backup=${characters},`
           if (characters == 'heroes' || characters == 'antiHeroes') {
             filters += `data-teams=${item.teams},`;
             filters += `data-equipments=${item.equipments},`;
@@ -345,7 +346,7 @@
 
         gallery[characters].container.lastElementChild.appendChild(
           elCr(`.col-auto${characters != 'boxes' ? '['+filters+']' : ''}`, [
-            elCr(`a.avatar.avatar-xl.p-0.border-0[data-fslightbox=${characters},data-fslightbox-backup=${characters},data-width=${characters=='boxes'?'700':'680'},data-height=${characters=='boxes'?'700':'709'},href=static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png]`, [
+            elCr(`a.avatar.avatar-xl.p-0.border-0[data-fslightbox=${characters},data-width=${characters=='boxes'?'700':'680'},data-height=${characters=='boxes'?'700':'709'},href=static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png]`, [
               elCr(`span.avatar.avatar-xl${characters=='boxes'?'':'.avatar-mu-xl'}.border.border-2.border-black.rounded-0[style=${positionStyles}background-image:url('static/img/${characters=='boxes'?'cover':'bio'}/${UTILS.removeChars(item.name)}.png')]`),
               elCr(`span.badge.badge-item.bg-${gallery[characters].color}.rounded-0.border.border-2.border-black.fst-game-title.w-100.text-white${item.name.length>17?'.text-wrap.fs-7':'.fs-6'}`, item.name),
               ((characters == 'heroes' || characters == 'antiHeroes') && (item?.isFF || item?.equipments))
